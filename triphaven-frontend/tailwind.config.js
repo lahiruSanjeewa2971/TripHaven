@@ -8,7 +8,7 @@ export default {
 	theme: {
 		extend: {
 			fontFamily: {
-				sans: ['Poppins', 'sans-serif'], // Poppins as the default sans font
+				poppins: ["Poppins", "sans-serif"],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

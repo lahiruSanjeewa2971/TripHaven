@@ -2,7 +2,7 @@ import { useState } from "react";
 // import './App.css'
 import { Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/Landing";
-import LandingPageCommonLayout from "./components/ui/Landing/common-layout";
+import LandingPageCommonLayout from "./components/Landing/common-layout";
 
 function App() {
   const [count, setCount] = useState(0);
