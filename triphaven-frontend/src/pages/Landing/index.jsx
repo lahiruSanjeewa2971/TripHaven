@@ -61,8 +61,12 @@ const LandingPage = () => {
         </div>
       </div>
 
+      {/* Top rated 4 places */}
+
       {/* Photo gallary */}
       <PhotoGallary/>
+
+      {/* feedbacks */}
     </div>
   );
 };
