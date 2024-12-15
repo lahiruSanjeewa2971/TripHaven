@@ -7,6 +7,8 @@ const app = express()
 const PORT = 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
+const authRoutes = require('./routes/authRoutes')
+
 app.use(cors({
     origin: process.env.CLIENT_URL,
     methods: ["GET", "POST", "DELETE", "PUT"],
@@ -19,6 +21,7 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("Connected to MongoDB"))
     .catch((e) => console.log("Error connecting to MongoDB:", e));
 
+app.use('/auth', authRoutes);
 
 app.use((err, req, res, next) => {
     console.log(err.stack);
