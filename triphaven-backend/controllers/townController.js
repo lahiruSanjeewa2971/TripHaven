@@ -2,14 +2,14 @@ const Town = require("../models/Town");
 
 const addNewTown = async (req, res) => {
     try {
-        const { townName, description } = req.body;
+        const { townName, description, image } = req.body;
         const checkExisting = await Town.findOne({ townName })
         if (checkExisting) return res.status(400).json({
             success: false,
             message: "This city name exist in the list."
         })
 
-        const newTown = new Town({ townName, description })
+        const newTown = new Town({ townName, image, description })
         const saveTown = await newTown.save();
 
         if (saveTown) {

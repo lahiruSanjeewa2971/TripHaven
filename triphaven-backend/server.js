@@ -9,6 +9,7 @@ const MONGO_URI = process.env.MONGO_URI;
 
 const authRoutes = require('./routes/authRoutes')
 const townRoutes = require('./routes/townRoutes')
+const mediaRoutes = require('./routes/mediaRoutes')
 
 app.use(cors({
     origin: process.env.CLIENT_URL,
@@ -23,6 +24,7 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .catch((e) => console.log("Error connecting to MongoDB:", e));
 
 app.use('/auth', authRoutes);
+app.use("/media", mediaRoutes);
 app.use('/town', townRoutes);
 
 app.use((err, req, res, next) => {
