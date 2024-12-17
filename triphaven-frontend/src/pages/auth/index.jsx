@@ -5,8 +5,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CommonForm from "@/components/common-form";
 import { signInFormControls, signUpFormControls } from "@/config";
+import { toast, ToastContainer } from "react-toastify";
+import { loginUser } from "@/restAPI/AuthRestAPI";
+import { useDispatch } from "react-redux";
+import {
+  loginFailure,
+  loginStart,
+  loginSuccess,
+} from "@/redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const AuthPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("signin");
   const [signInFormData, setSignInFormData] = useState({
     email: "",
@@ -37,6 +48,45 @@ const AuthPage = () => {
       signUpFormData.email !== "" &&
       signUpFormData.password !== ""
     );
+  };
+
+  const handleLoginUser = async (event) => {
+    event.preventDefault();
+    console.log("data :", signInFormData);
+
+    if (
+      signInFormData.password === null ||
+      signInFormData.password === "" ||
+      signInFormData.password.length < 4
+    ) {
+      toast.warning("Invalid password. Please enter a valid password.");
+      return;
+    }
+    dispatch(loginStart());
+    try {
+      const response = await loginUser(signInFormData);
+      if (response.success) {
+        const payload = {
+          token: response?.data?.accessToken,
+          role: response?.data?.user?.role,
+          data: response?.data?.user,
+        };
+        dispatch(loginSuccess(payload));
+        toast.success(`${response?.message}`);
+        if (response?.data?.user?.role === "admin") {
+          navigate("/traveller");
+        } else {
+          navigate("/traveller");
+        }
+      } else {
+        toast.error("Login failed: Invalid credentials");
+      }
+      console.log("Login successful:", response);
+    } catch (error) {
+      console.error("Login failed:", error);
+      dispatch(loginFailure(error.message));
+      toast.error(`Login failed: ${error.message}`);
+    }
   };
 
   return (
@@ -106,7 +156,7 @@ const AuthPage = () => {
                         formData={signInFormData}
                         setFormData={setSignInFormData}
                         isButtonDisabled={!checkIfSignInFormIsValid()}
-                        // handleSubmit={}
+                        handleSubmit={handleLoginUser}
                       />
                     </CardContent>
                   </Card>
@@ -185,6 +235,7 @@ const AuthPage = () => {
           </div> */}
         {/* </div> */}
       </div>
+      <ToastContainer />
     </div>
   );
 };

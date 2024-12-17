@@ -15,7 +15,7 @@ const CommonForm = ({
         <FormControls
             formData={formData}
             setFormData={setFormData}
-            FormControls={formControls}
+            formControls={formControls}
         />
         <Button 
         type="submit"
