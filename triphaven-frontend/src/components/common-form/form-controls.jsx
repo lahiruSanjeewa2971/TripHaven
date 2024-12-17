@@ -9,7 +9,7 @@ import {
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 
-const FormControls = ({ FormControls = [], formData, setFormData }) => {
+const FormControls = ({ formControls = [], formData, setFormData }) => {
   const renderComponentByType = (getControlItem) => {
     let element = null;
     const value = formData[getControlItem.name] || null;
@@ -22,7 +22,7 @@ const FormControls = ({ FormControls = [], formData, setFormData }) => {
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
             type={getControlItem.type}
-            value={value}
+            value={value || ""}
             onChange={(event) =>
               setFormData({
                 ...formData,
@@ -100,7 +100,7 @@ const FormControls = ({ FormControls = [], formData, setFormData }) => {
 
   return (
     <div className="flex flex-col gap-3">
-      {FormControls.map((controlItem) => (
+      {formControls.map((controlItem) => (
         <div key={controlItem.name}>
           <Label htmlFor={controlItem.name}>{controlItem.label}</Label>
           {renderComponentByType(controlItem)}
