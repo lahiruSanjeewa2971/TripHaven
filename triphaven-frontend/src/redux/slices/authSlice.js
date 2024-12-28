@@ -28,7 +28,9 @@ export const authSlice = createSlice({
             state.userData = action.payload.data;
             state.isLoggedIn = true;
 
+            // console.log(action.payload)
             localStorage.setItem('token', action.payload.token);
+            localStorage.setItem('role', action.payload.role);
         },
         loginFailure: (state, action) => {
             state.loading = false;
@@ -43,7 +45,7 @@ export const authSlice = createSlice({
             state.loading = false;
 
             // Remove from localStorage
-            localStorage.removeItem('token');
+            localStorage.clear();
         },
     }
 })

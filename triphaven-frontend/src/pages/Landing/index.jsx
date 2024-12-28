@@ -1,10 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import landingPage from "../../assets/images/hero_1.jpg";
 import welcomePartImage from "../../assets/images/img_2.jpg";
 import { Button } from "@/components/ui/button";
 import PhotoGallary from "./photoGallary";
+import TopPlaces from "./topPlaces";
+import { toast } from "react-toastify";
+import { getCitiesList } from "@/restAPI/CityAPI";
+import { Loader } from "lucide-react";
 
 const LandingPage = () => {
+  const [cityList, setCityList] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchCityList = async () => {
+    setLoading(true);
+    try {
+      const response = await getCitiesList();
+      console.log("city list :", response);
+      if (response.success) {
+        setCityList(response?.data);
+      } else {
+        setCityList([]);
+      }
+    } catch (error) {
+      setCityList([]);
+      console.log("error in fetch city list :", error);
+      // toast.error("")
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCityList();
+  }, []);
+
   return (
     <div>
       <div
@@ -56,15 +86,60 @@ const LandingPage = () => {
               Let us help you find the perfect place to relax, explore, and
               create unforgettable memories.
             </p>
-            <Button style={{ borderRadius: '0.375rem' }} className="w-full sm:w-40 border rounded-md">Contact Us</Button>
+            <Button
+              style={{ borderRadius: "0.375rem" }}
+              className="w-full sm:w-40 border rounded-md"
+            >
+              Contact Us
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Top rated 4 places */}
+      {/* Top rated 3 places */}
+      {/* <div className="bg-topPlacesBackgroundColor text-white "> */}
+      <div className="bg-gradient-to-b from-[#B1B2A6] to-[#F5F5F5] text-white ">
+        <div className="p-3 sm:p-13 md:p-16 lg:p-32">
+          {loading ? (
+            <>
+              <div className="flex items-center justify-center  space-x-2">
+                <Loader className="animate-spin w-5 h-5" />
+                <span>Loading...</span>
+              </div>
+            </>
+          ) : cityList && cityList.length > 0 ? (
+            <div
+              className={`flex flex-col items-center justify-center gap-3
+              ${
+                cityList.length === 1
+                  ? "sm:flex sm:items-center"
+                  : cityList.length === 2
+                  ? "sm:grid sm:grid-cols-2 sm:items-center"
+                  : "sm:grid sm:grid-cols-3 sm:items-center"
+              }
+            `}
+            >
+              {cityList.map((singleCity) => (
+                <>
+                  <div>
+                    <TopPlaces
+                      singleCityDetails={singleCity}
+                      key={singleCity._id}
+                    />
+                  </div>
+                </>
+              ))}
+            </div>
+          ) : (
+            <>
+              <span className="flex items-center justify-center ">No data</span>
+            </>
+          )}
+        </div>
+      </div>
 
       {/* Photo gallary */}
-      <PhotoGallary/>
+      <PhotoGallary />
 
       {/* feedbacks */}
     </div>

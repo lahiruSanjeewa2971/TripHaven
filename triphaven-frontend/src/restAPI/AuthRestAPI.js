@@ -14,3 +14,16 @@ export const loginUser = async (credentials) => {
         };
     }
 }
+
+export const registerUser = async (credentials) => {
+    try {
+        const response = await axios.post(`${API_URL}/auth/register`, credentials)
+        return response.data;
+    } catch (error) {
+        console.log('Error in login :', error)
+        throw {
+            status: error.response?.status || 500,
+            message: error.response?.data?.message || "Something went wrong. Please try again.",
+        };
+    }
+}

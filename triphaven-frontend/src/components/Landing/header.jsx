@@ -9,7 +9,9 @@ const LandingPageCommonHeader = () => {
   const dispatch = useDispatch();
 
   return (
-    <header className="sticky top-0 z-50 bg-transparent shadow-md transition-all duration-300 flex items-center justify-between bg-opacity-5">
+    // <header className="sticky top-0 z-50 bg-transparent shadow-md transition-all duration-300 flex items-center justify-between bg-opacity-5">
+    <header className="sticky top-0 z-50 bg-headerBackgroundColor text-white transition-all duration-300 flex items-center justify-between">
+
       <div className="p-4 text-xl font-bold font-poppins">TripHeaven</div>
       <div className="p-4 text-xl font-bold hidden md:flex items-center space-x-4 ">
         <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
