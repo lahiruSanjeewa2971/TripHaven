@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CommonForm from "@/components/common-form";
 import { signInFormControls, signUpFormControls } from "@/config";
 import { toast, ToastContainer } from "react-toastify";
-import { loginUser } from "@/restAPI/AuthRestAPI";
+import { loginUser, registerUser } from "@/restAPI/AuthRestAPI";
 import { useDispatch } from "react-redux";
 import {
   loginFailure,
@@ -52,7 +52,7 @@ const AuthPage = () => {
 
   const handleLoginUser = async (event) => {
     event.preventDefault();
-    console.log("data :", signInFormData);
+    // console.log("data :", signInFormData);
 
     if (
       signInFormData.password === null ||
@@ -81,11 +81,36 @@ const AuthPage = () => {
       } else {
         toast.error("Login failed: Invalid credentials");
       }
-      console.log("Login successful:", response);
     } catch (error) {
       console.error("Login failed:", error);
       dispatch(loginFailure(error.message));
       toast.error(`Login failed: ${error.message}`);
+    }
+  };
+  
+  const handleRegisterUser = async (event) => {
+    try {
+      event.preventDefault();
+      if (!checkIfSignUpFormIsValid()) {
+        toast.warning("Please fill the form before register.");
+      } else if (
+        signUpFormData.password === null ||
+        signUpFormData.password === "" ||
+        signUpFormData.password.length < 4
+      ) {
+        toast.warning("Invalid password. Please enter a valid password.");
+      } else {
+        const response = await registerUser(signUpFormData)
+        if(response.success){
+          toast.success(`${response?.message}`);
+          navigate("/traveller");
+        } else {
+          toast.error("Register failed");
+        }
+      }
+    } catch (error) {
+      console.error("Register failed:", error);
+      toast.error(`Registration failed: ${error.message}`);
     }
   };
 
@@ -176,7 +201,7 @@ const AuthPage = () => {
                         formData={signUpFormData}
                         setFormData={setSignUpFormData}
                         isButtonDisabled={!checkIfSignUpFormIsValid()}
-                        // handleSubmit={handleRegisterUser}
+                        handleSubmit={handleRegisterUser}
                       />
                     </CardContent>
                   </Card>

@@ -19,7 +19,9 @@ export default {
 				// background: '#F1E0C6',
 				// background: '#A8D9E8',
 				// background: '#E8F6FA',
+				headerBackgroundColor: '#BDD6E1',
 				background: '#F7F2E9',
+				topPlacesBackgroundColor: '#DDE2E8',
 				// background: '#D07C57',
 				foreground: 'hsl(var(--foreground))',
 				card: {
