@@ -74,7 +74,7 @@ const AuthPage = () => {
         dispatch(loginSuccess(payload));
         toast.success(`${response?.message}`);
         if (response?.data?.user?.role === "admin") {
-          navigate("/traveller");
+          navigate("/admin");
         } else {
           navigate("/traveller");
         }

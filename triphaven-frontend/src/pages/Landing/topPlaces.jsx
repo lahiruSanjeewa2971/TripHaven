@@ -5,7 +5,6 @@ const TopPlaces = ({ singleCityDetails }) => {
     <div className="flex items-center justify-center">
       <Card className="cursor-pointer hover:shadow-xl transition-shadow duration-300 w-[300px] sm:w-full h-[400px]  border-none">
         <CardContent className="flex flex-col items-center gap-4 p-4">
-          {/* Image as background spanning full width */}
           <div className="w-full h-48 rounded-lg overflow-hidden relative">
             <img
               src={singleCityDetails.image}
@@ -13,7 +12,6 @@ const TopPlaces = ({ singleCityDetails }) => {
               className="w-full h-full object-cover"
             />
           </div>
-          {/* Title below the image */}
           <div className="text-gray-600 font-bold text-center mt-4 text-2xl">
             <CardTitle>{singleCityDetails.townName}</CardTitle>
           </div>
