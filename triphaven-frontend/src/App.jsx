@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { loginSuccess } from "./redux/slices/authSlice";
 import { jwtDecode } from "jwt-decode";
+import AdminPage from "./components/admin";
+import Towns from "./pages/Landing/Towns";
 
 function App() {
   const dispatch = useDispatch();
@@ -39,8 +41,11 @@ function App() {
 
         <Route path="/traveller" element={<LandingPageCommonLayout />}>
           <Route path="" element={<LandingPage />} />
+          <Route path="towns" element={<Towns />} />
           {/* <Route path="home" element={<LandingPage />} /> */}
         </Route>
+
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </>
   );

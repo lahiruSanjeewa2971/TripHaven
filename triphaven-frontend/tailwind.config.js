@@ -16,13 +16,11 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			colors: {
-				// background: '#F1E0C6',
-				// background: '#A8D9E8',
-				// background: '#E8F6FA',
-				headerBackgroundColor: '#BDD6E1',
 				background: '#F7F2E9',
+				headerBackgroundColor: '#BDD6E1',
+				headerForTownsBackgroundColor: '#A3C6E1',
 				topPlacesBackgroundColor: '#DDE2E8',
-				// background: '#D07C57',
+				cityListContainerBackground: '#E1C8C4',
 				foreground: 'hsl(var(--foreground))',
 				card: {
 					DEFAULT: 'hsl(var(--card))',
