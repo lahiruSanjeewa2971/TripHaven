@@ -6,6 +6,7 @@ const { authorizeRole } = require('../middlewares/roleMiddleware')
 const router = express.Router()
 
 // admin only
+// router.post('/add', addNewTown)
 router.post('/add', authenticate, authorizeRole(['admin']), addNewTown)
 
 // common toute

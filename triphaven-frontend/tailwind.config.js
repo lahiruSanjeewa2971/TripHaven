@@ -18,7 +18,8 @@ export default {
 			colors: {
 				background: '#F7F2E9',
 				headerBackgroundColor: '#BDD6E1',
-				headerForTownsBackgroundColor: '#A3C6E1',
+				// headerForTownsBackgroundColor: '#A3C6E1',
+				headerForTownsBackgroundColor: '#D2CED3',
 				topPlacesBackgroundColor: '#DDE2E8',
 				cityListContainerBackground: '#E1C8C4',
 				foreground: 'hsl(var(--foreground))',
