@@ -17,13 +17,9 @@ const Towns = () => {
       const response = await getCitiesList();
       // console.log("city list :", response);
       if (response.success) {
-        setCityList(response?.data);
-
-        // get top 3 rated cities | sorted by rating.
-        const topCity = response.data
-          .sort((a, b) => b.rating - a.rating)
-          .slice(0, 3);
-        setTopCityList(topCity);
+        const sortedCities = response.data.sort((a, b) => b.rating - a.rating);
+        setCityList(response.data);
+        setTopCityList(sortedCities.slice(0, 3));
       } else {
         setCityList([]);
       }
@@ -36,12 +32,32 @@ const Towns = () => {
     }
   };
 
+  const CityCard = ({ city, reverseOrder }) => (
+    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center mt-6 md:px-16 px-5">
+      <div className={reverseOrder ? "order-1 md:order-2" : ""}>
+        <img
+          src={city.image}
+          alt={city.townName}
+          className="inset-0 w-full h-full object-cover"
+        />
+      </div>
+      <div className={reverseOrder ? "order-2 md:order-1 p-6" : ""}>
+        <p className="text-justify text-gray-700 leading-relaxed text-lg">
+          {city.description}
+        </p>
+        <Button className="p-3 w-full sm:w-48 mt-5 border border-gray-600 rounded-lg">
+          Destinations
+        </Button>
+      </div>
+    </div>
+  );
+
   useEffect(() => {
     fetchCityList();
   }, []);
 
   return (
-    <div>
+    <div className="mb-[-0.2rem]">
       <div
         className="relative bg-cover bg-center bg-no-repeat min-h-screen w-full"
         style={{
@@ -62,28 +78,24 @@ const Towns = () => {
         </div>
       </div>
 
-      <div className="w-full bg-gray-100">
+      <div className="w-full bg-gradient-to-b from-gray-100 to-[#D2CED3]">
         <div className="p-3 sm:p-13 md:p-16 lg:p-32">
-          <div className="flex items-center justify-center text-center">
+          <div className="flex items-center justify-center text-center ">
             <h1 className="font-bold text-3xl capitalize text-primary">
               Top most famous Cities.
             </h1>
           </div>
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center mt-6">
-            <div>
-              <img
-                src={topCityList[0].image}
-                alt={topCityList[0].townName}
-                className="inset-0 w-full h-full object-cover"
-              />
-            </div>
-            <div className="p-6">
-              <p className="text-justify text-gray-700 leading-relaxed text-lg">
-                {topCityList[0].description}
-              </p>
-              <Button className="p-3 w-full ">See Hotels</Button>
-            </div>
-          </div>
+          {topCityList && topCityList.length > 0 && (
+            <>
+              {topCityList.map((city, index) => (
+                <CityCard
+                  key={city._id}
+                  city={city}
+                  reverseOrder={index === 1} // Reverse order for the second card
+                />
+              ))}
+            </>
+          )}
 
           {/* Render City List */}
           <div className="flex items-center justify-center text-center mt-10">
@@ -125,20 +137,6 @@ const Towns = () => {
                 No data
               </span>
             )}
-            {/* {loading ? (
-              <div className="flex items-center justify-center space-x-2 mt-5">
-                <Loader className="animate-spin w-5 h-5" />
-                <span>Loading...</span>
-              </div>
-            ) : cityList && cityList.length > 0 ? (
-              <div className="flex flex-wrap justify-center gap-6 mt-10">
-                <DisplaySingleTownWithDetails cityList={cityList} />
-              </div>
-            ) : (
-              <span className="flex items-center justify-center mt-5">
-                No data
-              </span>
-            )} */}
           </div>
         </div>
       </div>
