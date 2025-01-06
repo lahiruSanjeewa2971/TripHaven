@@ -36,7 +36,7 @@ const LandingPageCommonHeader = () => {
           </span>
         </Link>
         <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
-          Places
+          Destinations
         </span>
         <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
           Restaurants
