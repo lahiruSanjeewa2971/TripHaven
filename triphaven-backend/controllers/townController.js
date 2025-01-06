@@ -1,3 +1,4 @@
+const Restaurant = require("../models/Restaurant");
 const Town = require("../models/Town");
 
 const addNewTown = async (req, res) => {
@@ -75,4 +76,31 @@ const getTownDetailsById = async (req, res) => {
     }
 }
 
-module.exports = { addNewTown, getAllTowns, getTownDetailsById }
+// get a town, with it's all registered restaurants
+const getTownWithRestaurant = async (req, res) => {
+    try {
+        const { townId } = req.params;
+
+        const town = await Town.findById(townId)
+        if (!town) return res.status(404).json({
+            success: false,
+            message: "Town not found."
+        })
+
+        const restaurants = await Restaurant.find({ town: townId })
+        res.status(200).json({
+            success: true,
+            data: {
+                town, restaurants
+            }
+        })
+    } catch (error) {
+        console.log('Error in getTownWithRestaurant :', error);
+        res.status(500).json({
+            success: false,
+            message: 'Some error occured.'
+        })
+    }
+}
+
+module.exports = { addNewTown, getAllTowns, getTownDetailsById, getTownWithRestaurant }
