@@ -20,6 +20,8 @@ export default {
 				headerBackgroundColor: '#BDD6E1',
 				// headerForTownsBackgroundColor: '#A3C6E1',
 				headerForTownsBackgroundColor: '#D2CED3',
+				headerForDestinationsBackgroundColor: '#CACCC7',
+				headerForRestaurantsBackgroundColor: '#BEC6CF',
 				topPlacesBackgroundColor: '#DDE2E8',
 				cityListContainerBackground: '#E1C8C4',
 				foreground: 'hsl(var(--foreground))',

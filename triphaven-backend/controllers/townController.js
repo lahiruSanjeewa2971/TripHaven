@@ -77,7 +77,7 @@ const getTownDetailsById = async (req, res) => {
 }
 
 // get a town, with it's all registered restaurants
-const getTownWithRestaurant = async (req, res) => {
+const getTownWithRestaurants = async (req, res) => {
     try {
         const { townId } = req.params;
 
@@ -95,7 +95,7 @@ const getTownWithRestaurant = async (req, res) => {
             }
         })
     } catch (error) {
-        console.log('Error in getTownWithRestaurant :', error);
+        console.log('Error in getTownWithRestaurants :', error);
         res.status(500).json({
             success: false,
             message: 'Some error occured.'
@@ -103,4 +103,4 @@ const getTownWithRestaurant = async (req, res) => {
     }
 }
 
-module.exports = { addNewTown, getAllTowns, getTownDetailsById, getTownWithRestaurant }
+module.exports = { addNewTown, getAllTowns, getTownDetailsById, getTownWithRestaurants }

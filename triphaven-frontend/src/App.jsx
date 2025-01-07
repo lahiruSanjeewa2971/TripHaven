@@ -8,6 +8,8 @@ import { loginSuccess } from "./redux/slices/authSlice";
 import { jwtDecode } from "jwt-decode";
 import AdminPage from "./components/admin";
 import Towns from "./pages/Landing/Towns";
+import Destinations from "./pages/Landing/Destinations";
+import Restaurants from "./pages/Landing/Restaurants";
 
 function App() {
   const dispatch = useDispatch();
@@ -42,6 +44,8 @@ function App() {
         <Route path="/traveller" element={<LandingPageCommonLayout />}>
           <Route path="" element={<LandingPage />} />
           <Route path="towns" element={<Towns />} />
+          <Route path="destinations" element={<Destinations />} />
+          <Route path="restaurants" element={<Restaurants />} />
           {/* <Route path="home" element={<LandingPage />} /> */}
         </Route>
 

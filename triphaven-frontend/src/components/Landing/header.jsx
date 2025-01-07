@@ -15,6 +15,10 @@ const LandingPageCommonHeader = () => {
       className={`sticky top-0 z-50 text-white transition-all duration-300 flex items-center justify-between ${
         location.pathname.includes("towns")
           ? "bg-headerForTownsBackgroundColor"
+          : location.pathname.includes("destinations")
+          ? "bg-headerForDestinationsBackgroundColor"
+          : location.pathname.includes("restaurants")
+          ? "bg-headerForRestaurantsBackgroundColor"
           : "bg-headerBackgroundColor"
       }`}
     >
@@ -35,12 +39,16 @@ const LandingPageCommonHeader = () => {
             Towns
           </span>
         </Link>
-        <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
-          Destinations
-        </span>
-        <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
-          Restaurants
-        </span>
+        <Link to="/traveller/destinations">
+          <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
+            Destinations
+          </span>
+        </Link>
+        <Link to="/traveller/restaurants">
+          <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
+            Restaurants
+          </span>
+        </Link>
         <div
           className="flex items-center cursor-pointer"
           onClick={() => {
