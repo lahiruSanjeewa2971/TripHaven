@@ -8,6 +8,7 @@ export default {
 	theme: {
 		extend: {
 			fontFamily: {
+				playwrite: ['Playwrite AU SA', 'sans-serif'],
 				poppins: ["Poppins", "sans-serif"],
 			},
 			borderRadius: {

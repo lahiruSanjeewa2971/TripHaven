@@ -14,3 +14,16 @@ export const getCitiesList = async () => {
         };
     }
 }
+
+export const getCitiesWithRestaurantsList = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/town/get-all-town-with-restaurant`)
+        return response.data;
+    } catch (error) {
+        console.log('Error in getting city with restaurants list. :', error)
+        throw {
+            status: error.response?.status || 500,
+            message: error.response?.data?.message || "Something went wrong. Please try again.",
+        };
+    }
+}
