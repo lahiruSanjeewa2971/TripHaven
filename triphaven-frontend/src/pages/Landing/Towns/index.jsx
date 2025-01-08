@@ -71,7 +71,7 @@ const Towns = () => {
             <h1 className="font-bold font-poppins text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center leading-tight">
               Best Cities
             </h1>
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-center mt-2 sm:mt-4">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-center mt-2 sm:mt-4 font-playwrite">
               Discover the best places for your next adventure.
             </p>
           </div>

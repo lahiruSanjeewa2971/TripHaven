@@ -103,4 +103,39 @@ const getTownWithRestaurants = async (req, res) => {
     }
 }
 
-module.exports = { addNewTown, getAllTowns, getTownDetailsById, getTownWithRestaurants }
+const getAllTownsWithRestaurants = async (req, res) => {
+    try {
+        const townsList = await Town.find();
+        // console.log(townsList)
+        if (!townsList || townsList.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No city found."
+            })
+        }
+        
+        const response = await Promise.all(
+            townsList.map(async (singleTown) => {
+                const restaurants = await Restaurant.find({town: singleTown._id});
+                return {
+                    townName: singleTown.townName,
+                    restaurants
+                }
+            })
+        )
+        // console.log(JSON.stringify(response, null, 2));
+        return res.status(200).json({
+            success: true,
+            data: response
+        })
+
+    } catch (error) {
+        console.log('Error in getAllTownsWithRestaurants :', error);
+        res.status(500).json({
+            success: false,
+            message: 'Some error occured.'
+        })
+    }
+}
+
+module.exports = { addNewTown, getAllTowns, getTownDetailsById, getTownWithRestaurants, getAllTownsWithRestaurants }
