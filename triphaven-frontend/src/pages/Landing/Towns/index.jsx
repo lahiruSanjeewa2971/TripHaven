@@ -81,7 +81,7 @@ const Towns = () => {
       <div className="w-full bg-gradient-to-b from-gray-100 to-[#D2CED3]">
         <div className="p-3 sm:p-13 md:p-16 lg:p-32">
           <div className="flex items-center justify-center text-center ">
-            <h1 className="font-bold text-3xl capitalize text-primary">
+            <h1 className="font-bold text-4xl capitalize text-primary font-playwrite mb-4">
               Top most famous Cities.
             </h1>
           </div>
