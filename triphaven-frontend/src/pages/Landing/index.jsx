@@ -74,7 +74,7 @@ const LandingPage = () => {
         <div className="absolute inset-0 bg-black bg-opacity-25"></div>
         <div className="relative z-10 flex items-center justify-center h-full text-center">
           <div className="text-white space-y-4 p-3 sm:p-13 md:p-16 lg:p-32 mb-10">
-            <h2 className="text-4xl font-bold">Welcome To Our Website</h2>
+            <h2 className="text-5xl font-bold font-playwrite">Welcome To Our Website</h2>
             <p className="text-lg">
               Discover the most beautiful and captivating places around the
               world with us. Whether you're planning your next adventure or

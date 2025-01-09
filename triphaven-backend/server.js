@@ -11,6 +11,7 @@ const authRoutes = require('./routes/authRoutes')
 const townRoutes = require('./routes/townRoutes')
 const mediaRoutes = require('./routes/mediaRoutes')
 const restaurantRoutes = require('./routes/restaurantRoutes')
+const placeRoutes = require('./routes/placeRoutes')
 
 app.use(cors({
     origin: process.env.CLIENT_URL,
@@ -28,6 +29,7 @@ app.use('/auth', authRoutes);
 app.use("/media", mediaRoutes);
 app.use('/town', townRoutes);
 app.use('/restaurant', restaurantRoutes);
+app.use('/destination', placeRoutes);
 
 app.use((err, req, res, next) => {
     console.log(err.stack);
