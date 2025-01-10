@@ -3,6 +3,10 @@ import destinationPage from "../../../assets/images/destination.jpg";
 import { getDestinationListWithCityName } from "@/restAPI/DestinationAPI";
 import { Loader } from "lucide-react";
 import SingleDestination from "./SingleDestination";
+import image1 from "../../../assets/images/login02.jpg";
+import image2 from "../../../assets/images/city-page.jpg";
+import image3 from "../../../assets/images/restaurant03.jpg";
+import image4 from "../../../assets/images/restaurant02.jpg";
 
 const Destinations = () => {
   const [loading, setLoading] = useState(false);
@@ -50,6 +54,42 @@ const Destinations = () => {
               destinations.
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* bento grid layout */}
+      <div className="w-full md:h-[600px] h-[80vh] flex flex-col md:flex-row items-center justify-center">
+        <div className="w-full md:w-1/2 md:h-full h-1/2 flex items-center justify-center">
+          <div className="w-full p-6 h-full grid grid-cols-6 grid-rows-9 gap-3 mt-2">
+            <div className="bg-red-600 col-span-3 row-span-4 flex items-center justify-center overflow-hidden rounded-[5%]">
+              <img src={image1} alt="" className="w-full h-full object-cover" />
+            </div>
+            <div className=" col-span-3 row-span-1"></div>
+            <div className="bg-red-600 col-span-3 row-span-3 flex items-center justify-center overflow-hidden rounded-[5%]">
+              <img src={image2} alt="" className="w-full h-full object-cover" />
+            </div>
+            <div className=" col-span-1 row-span-3"></div>
+            <div className="bg-red-600 col-span-2 row-span-3 flex items-center justify-center overflow-hidden rounded-[5%]">
+              <img src={image3} alt="" className="w-full h-full object-cover" />
+            </div>
+            <div className="bg-red-600 col-span-3 row-span-5 flex items-center justify-center overflow-hidden rounded-[5%]">
+              <img src={image4} alt="" className="w-full h-full object-cover" />
+            </div>
+            <div className=" col-span-3 row-span-2"></div>
+          </div>
+        </div>
+
+        {/* Right Section */}
+        <div className=" w-full md:w-1/2 md:h-full flex items-center justify-center px-4">
+          <p className="leading-relaxed mt-3 font-playwrite text-white md:text-xl">
+            Welcome to the enchanting world of Sri Lanka, a land of diverse
+            landscapes and timeless wonders. From pristine beaches and lush tea
+            plantations to ancient ruins and vibrant cultural festivals, this
+            island nation offers something for every traveler. Discover the
+            unique beauty and stories behind each destination, as you embark on
+            a journey to explore Sri Lanka's breathtaking sights and rich
+            heritage. Let the adventure begin!
+          </p>
         </div>
       </div>
 
