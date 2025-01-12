@@ -45,6 +45,7 @@ function App() {
           <Route path="" element={<LandingPage />} />
           <Route path="towns" element={<Towns />} />
           <Route path="destinations" element={<Destinations />} />
+          <Route path="destinations/:cityId" element={<Destinations />} />
           <Route path="restaurants" element={<Restaurants />} />
           {/* <Route path="home" element={<LandingPage />} /> */}
         </Route>

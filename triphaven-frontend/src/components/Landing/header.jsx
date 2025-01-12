@@ -39,7 +39,7 @@ const LandingPageCommonHeader = () => {
             Towns
           </span>
         </Link>
-        <Link to="/traveller/destinations">
+        <Link to="/traveller/destinations/">
           <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
             Destinations
           </span>

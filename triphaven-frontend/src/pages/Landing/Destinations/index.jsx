@@ -7,10 +7,15 @@ import image1 from "../../../assets/images/login02.jpg";
 import image2 from "../../../assets/images/city-page.jpg";
 import image3 from "../../../assets/images/restaurant03.jpg";
 import image4 from "../../../assets/images/restaurant02.jpg";
+import { useLocation, useParams } from "react-router-dom";
+import { getCitiesWithDestinationsList } from "@/restAPI/CityAPI";
 
 const Destinations = () => {
+  const location = useLocation();
+  const { cityId } = useParams();
   const [loading, setLoading] = useState(false);
   const [destinationsList, setDestinationsList] = useState([]);
+  const [cityWithDestinations, setCityWithDestinations] = useState([]);
 
   const fetchDestinationsList = async () => {
     try {
@@ -30,9 +35,35 @@ const Destinations = () => {
     }
   };
 
+  const fetchCityWithDestinations = async (cityId) => {
+    try {
+      setLoading(true);
+      const response = await getCitiesWithDestinationsList(cityId);
+      console.log("fetchCityWithDestinations :", response);
+      if (response.success) {
+        setCityWithDestinations(response?.data);
+      } else {
+        setCityWithDestinations([]);
+      }
+    } catch (error) {
+      console.log("Error in fetchDestinationsList :", error);
+      toast.error("Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // useEffect(() => {
+  //   fetchDestinationsList();
+  // }, []);
+
   useEffect(() => {
-    fetchDestinationsList();
-  }, []);
+    if (cityId) {
+      fetchCityWithDestinations(cityId);
+    } else {
+      fetchDestinationsList();
+    }
+  }, [cityId]);
 
   return (
     <div className="mb-[-0.3rem] bg-[#beb3a3]">
@@ -61,18 +92,18 @@ const Destinations = () => {
       <div className="w-full md:h-[600px] h-[80vh] flex flex-col md:flex-row items-center justify-center">
         <div className="w-full md:w-1/2 md:h-full h-1/2 flex items-center justify-center">
           <div className="w-full p-6 h-full grid grid-cols-6 grid-rows-9 gap-3 mt-2">
-            <div className="bg-red-600 col-span-3 row-span-4 flex items-center justify-center overflow-hidden rounded-[5%]">
+            <div className="col-span-3 row-span-4 flex items-center justify-center overflow-hidden rounded-[5%]">
               <img src={image1} alt="" className="w-full h-full object-cover" />
             </div>
             <div className=" col-span-3 row-span-1"></div>
-            <div className="bg-red-600 col-span-3 row-span-3 flex items-center justify-center overflow-hidden rounded-[5%]">
+            <div className="col-span-3 row-span-3 flex items-center justify-center overflow-hidden rounded-[5%]">
               <img src={image2} alt="" className="w-full h-full object-cover" />
             </div>
             <div className=" col-span-1 row-span-3"></div>
-            <div className="bg-red-600 col-span-2 row-span-3 flex items-center justify-center overflow-hidden rounded-[5%]">
+            <div className="col-span-2 row-span-3 flex items-center justify-center overflow-hidden rounded-[5%]">
               <img src={image3} alt="" className="w-full h-full object-cover" />
             </div>
-            <div className="bg-red-600 col-span-3 row-span-5 flex items-center justify-center overflow-hidden rounded-[5%]">
+            <div className="col-span-3 row-span-5 flex items-center justify-center overflow-hidden rounded-[5%]">
               <img src={image4} alt="" className="w-full h-full object-cover" />
             </div>
             <div className=" col-span-3 row-span-2"></div>
@@ -97,7 +128,9 @@ const Destinations = () => {
         <div className="flex flex-col justify-center items-center py-14">
           <div className="flex items-center justify-center text-center">
             <h1 className="text-5xl font-bold font-playwrite text-center">
-              Destinations.
+              {cityId
+                ? `${cityWithDestinations?.town?.townName}`
+                : "Destinations."}
             </h1>
           </div>
 
@@ -107,7 +140,7 @@ const Destinations = () => {
                 <Loader className="animate-spin w-5 h-5" />
                 <span>Loading...</span>
               </div>
-            ) : destinationsList && destinationsList.length > 0 ? (
+            ) : destinationsList && destinationsList?.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
                 {destinationsList.map((item, index) => (
                   <div className="relative w-full border-b" key={index}>
@@ -129,6 +162,40 @@ const Destinations = () => {
                       <div className="p-4">
                         <p className="text-gray-800 text-lg leading-relaxed">
                           City : {item.town.townName}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-4">
+                      <p className="text-gray-800 text-lg leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : cityId && cityWithDestinations?.destinations?.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+                {cityWithDestinations?.destinations.map((item, index) => (
+                  <div className="relative w-full border-b" key={index}>
+                    <div className="w-full h-[300px] rounded-lg shadow-lg overflow-hidden">
+                      <div className="absolute z-10 py-2 px-4 sm:px-6 lg:px-14 text-white bg-gradient-to-r from-black/80 to-black/40 top-0 rounded-md w-full">
+                        <h2 className="text-sm sm:text-lg lg:text-xl font-bold text-center">
+                          {item.destinationName}
+                        </h2>
+                      </div>
+
+                      <div className="overflow-hidden h-2/3">
+                        <img
+                          src={item.image}
+                          alt={item.destinationName}
+                          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                        />
+                      </div>
+
+                      <div className="p-4">
+                        <p className="text-gray-800 text-lg leading-relaxed">
+                          City : {cityWithDestinations?.town?.townName}
                         </p>
                       </div>
                     </div>

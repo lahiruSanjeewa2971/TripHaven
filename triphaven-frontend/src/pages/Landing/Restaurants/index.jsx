@@ -148,3 +148,48 @@ const Restaurants = () => {
 };
 
 export default Restaurants;
+
+
+{
+  /**
+   * const destinationArray = [
+  { _id: "1", image: "image1.jpg" },
+  { _id: "2", image: "image2.jpg" },
+  { _id: "3", image: "image3.jpg" },
+  { _id: "4", image: "image4.jpg" },
+];
+
+const GridComponent = () => {
+  // Define colSpan and rowSpan based on position or predefined rules
+  const gridPositions = [
+    { colSpan: 3, rowSpan: 4 },
+    { colSpan: 3, rowSpan: 3 },
+    { colSpan: 2, rowSpan: 3 },
+    { colSpan: 3, rowSpan: 5 },
+  ];
+
+  return (
+    <div className="w-full p-6 h-full grid grid-cols-6 grid-rows-9 gap-3 mt-2">
+      {destinationArray.map((item, index) => {
+        const position = gridPositions[index] || { colSpan: 1, rowSpan: 1 }; // Fallback for extra items
+        return (
+          <div
+            key={item._id}
+            className={`col-span-${position.colSpan} row-span-${position.rowSpan} flex items-center justify-center overflow-hidden rounded-[5%]`}
+          >
+            <img
+              src={item.image}
+              alt={`Destination ${item._id}`}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+export default GridComponent;
+
+   */
+}
