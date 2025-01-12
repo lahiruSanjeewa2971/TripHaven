@@ -1,8 +1,15 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 const TopPlaces = ({ singleCityDetails }) => {
+  const navigate = useNavigate()
+
+  const handleClickOnCard = (singleCityDetails) => {
+    navigate(`/traveller/single-card/${singleCityDetails._id}`)
+  }
+
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center" onClick={() => {handleClickOnCard(singleCityDetails)}}>
       <Card className="cursor-pointer hover:shadow-xl transition-shadow duration-300 w-[300px] sm:w-full h-[400px]  border-none">
         <CardContent className="flex flex-col items-center gap-4 p-4">
           <div className="w-full h-48 rounded-lg overflow-hidden relative">
