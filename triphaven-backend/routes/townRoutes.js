@@ -1,5 +1,5 @@
 const express = require('express')
-const { addNewTown, getAllTowns, getTownDetailsById, getTownWithRestaurants, getAllTownsWithRestaurants } = require('../controllers/townController')
+const { addNewTown, getAllTowns, getTownDetailsById, getTownWithRestaurants, getAllTownsWithRestaurants, getTownWithDestinations } = require('../controllers/townController')
 const { authenticate } = require('../middlewares/authMiddleware')
 const { authorizeRole } = require('../middlewares/roleMiddleware')
 
@@ -14,5 +14,6 @@ router.get('/get', getAllTowns)
 router.get('/get-all-town-with-restaurant', getAllTownsWithRestaurants)
 router.get('/get/details/:id', getTownDetailsById)
 router.get('/get-town-with-restaurant/:townId', getTownWithRestaurants)
+router.get('/get-town-with-destinations/:townId', getTownWithDestinations)
 
 module.exports = router

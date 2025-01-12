@@ -5,8 +5,10 @@ import { Loader } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DisplaySingleTownWithDetails from "./DisplaySingleTownWithDetails";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Towns = () => {
+  const navigate = useNavigate();
   const [cityList, setCityList] = useState([]);
   const [topCityList, setTopCityList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -32,6 +34,11 @@ const Towns = () => {
     }
   };
 
+  const handleDestinationsClick = (city) => {
+    console.log('city :', city)
+    navigate(`/traveller/destinations/${city._id}`)
+  }
+
   const CityCard = ({ city, reverseOrder }) => (
     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center mt-6 md:px-16 px-5">
       <div className={reverseOrder ? "order-1 md:order-2" : ""}>
@@ -45,7 +52,7 @@ const Towns = () => {
         <p className="text-justify text-gray-700 leading-relaxed text-lg">
           {city.description}
         </p>
-        <Button className="p-3 w-full sm:w-48 mt-5 border border-gray-600 rounded-lg">
+        <Button className="p-3 w-full sm:w-48 mt-5 border border-gray-600 rounded-lg" onClick={() => {handleDestinationsClick(city)}} >
           Destinations
         </Button>
       </div>

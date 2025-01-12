@@ -1,3 +1,4 @@
+const Destination = require("../models/Place");
 const Restaurant = require("../models/Restaurant");
 const Town = require("../models/Town");
 
@@ -103,6 +104,32 @@ const getTownWithRestaurants = async (req, res) => {
     }
 }
 
+const getTownWithDestinations = async (req, res) => {
+    try {
+        const { townId } = req.params;
+
+        const town = await Town.findById(townId)
+        if (!town) return res.status(404).json({
+            success: false,
+            message: "Town not found."
+        })
+
+        const destinations = await Destination.find({ town: townId })
+        res.status(200).json({
+            success: true,
+            data: {
+                town, destinations
+            }
+        })
+    } catch (error) {
+        console.log('Error in getTownWithDestinations :', error);
+        res.status(500).json({
+            success: false,
+            message: 'Some error occured.'
+        })
+    }
+}
+
 const getAllTownsWithRestaurants = async (req, res) => {
     try {
         const townsList = await Town.find();
@@ -138,4 +165,4 @@ const getAllTownsWithRestaurants = async (req, res) => {
     }
 }
 
-module.exports = { addNewTown, getAllTowns, getTownDetailsById, getTownWithRestaurants, getAllTownsWithRestaurants }
+module.exports = { addNewTown, getAllTowns, getTownDetailsById, getTownWithRestaurants, getAllTownsWithRestaurants, getTownWithDestinations }

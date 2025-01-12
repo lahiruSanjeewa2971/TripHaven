@@ -27,3 +27,16 @@ export const getCitiesWithRestaurantsList = async () => {
         };
     }
 }
+
+export const getCitiesWithDestinationsList = async (cityId) => {
+    try {
+        const response = await axios.get(`${API_URL}/town/get-town-with-destinations/${cityId}`)
+        return response.data;
+    } catch (error) {
+        console.log('Error in getting city with destinations list. :', error)
+        throw {
+            status: error.response?.status || 500,
+            message: error.response?.data?.message || "Something went wrong. Please try again.",
+        };
+    }
+}
