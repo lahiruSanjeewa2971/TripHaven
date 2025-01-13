@@ -5,7 +5,7 @@ const TopPlaces = ({ singleCityDetails }) => {
   const navigate = useNavigate()
 
   const handleClickOnCard = (singleCityDetails) => {
-    navigate(`/traveller/single-card/${singleCityDetails._id}`)
+    navigate(`/single-card/${singleCityDetails._id}`)
   }
 
   return (

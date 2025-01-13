@@ -57,5 +57,32 @@ const getDestinationList = async (req, res) => {
     }
 }
 
+const getSingleDestinationById = async (req, res) => {
+    try {
+        const {id} = req.params;
 
-module.exports = { addDestination, getDestinationList }
+        const destinationDetails = await Destination.findById(id)
+
+        if (!destinationDetails) {
+            return res.status(404).json({
+                success: false,
+                message: "No destination found."
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            data: destinationDetails
+        })
+
+    } catch (error) {
+        console.log('Error in getSingleDestinationById :', error)
+        res.status(500).json({
+            success: false,
+            message: 'Something went wrong.'
+        })
+    }
+}
+
+
+module.exports = { addDestination, getDestinationList, getSingleDestinationById }

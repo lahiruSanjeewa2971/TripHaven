@@ -8,6 +8,8 @@ const LandingPageCommonHeader = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  const token = localStorage.getItem("token");
+  // console.log('token', token)
 
   return (
     // <header className="sticky top-0 z-50 bg-transparent shadow-md transition-all duration-300 flex items-center justify-between bg-opacity-5">
@@ -24,40 +26,46 @@ const LandingPageCommonHeader = () => {
     >
       <div
         className="p-4 text-xl font-bold font-poppins cursor-pointer"
-        onClick={() => navigate("/traveller")}
+        onClick={() => navigate("/")}
       >
         TripHeaven
       </div>
       <div className="p-4 text-xl font-bold hidden md:flex items-center space-x-4 ">
-        <Link to="/traveller">
+        <Link to="/">
           <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
             Home
           </span>
         </Link>
-        <Link to="/traveller/towns">
+        <Link to="/towns">
           <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
             Towns
           </span>
         </Link>
-        <Link to="/traveller/destinations/">
+        <Link to="/destinations/">
           <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
             Destinations
           </span>
         </Link>
-        <Link to="/traveller/restaurants">
+        <Link to="/restaurants">
           <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
             Restaurants
           </span>
         </Link>
-        <div
-          className="flex items-center cursor-pointer"
-          onClick={() => {
-            dispatch(logout());
-            navigate("/");
-          }}
-        >
-          <LogInIcon className="w-6 h-6 mr-2" />
-        </div>
+        {token === null ? (
+          <Link to="/auth" className="flex items-center justify-center">
+            <span className="rounded-xl p-1 px-4 border-2 border-red-600 hover:bg-red-600">Login</span>
+          </Link>
+        ) : (
+          <div
+            className="flex items-center cursor-pointer hover:text-red-700"
+            onClick={() => {
+              dispatch(logout());
+              navigate("/");
+            }}
+          >
+            <LogInIcon className="w-6 h-6 mr-2" />
+          </div>
+        )}
       </div>
 
       {/* Menu icon for smaller screens */}

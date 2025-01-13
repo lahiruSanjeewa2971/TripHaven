@@ -14,3 +14,16 @@ export const getDestinationListWithCityName = async () => {
         };
     }
 }
+
+export const getDestinationDetailsById = async (destinationId) => {
+    try {
+        const response = await axios.get(`${API_URL}/destination/get-details/${destinationId}`)
+        return response.data;
+    } catch (error) {
+        console.log('Error in getting destination details. :', error)
+        throw {
+            status: error.response?.status || 500,
+            message: error.response?.data?.message || "Something went wrong. Please try again.",
+        };
+    }
+}
