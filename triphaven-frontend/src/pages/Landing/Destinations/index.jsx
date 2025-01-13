@@ -7,11 +7,11 @@ import image1 from "../../../assets/images/login02.jpg";
 import image2 from "../../../assets/images/city-page.jpg";
 import image3 from "../../../assets/images/restaurant03.jpg";
 import image4 from "../../../assets/images/restaurant02.jpg";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getCitiesWithDestinationsList } from "@/restAPI/CityAPI";
 
 const Destinations = () => {
-  const location = useLocation();
+  const navigation = useNavigate();
   const { cityId } = useParams();
   const [loading, setLoading] = useState(false);
   const [destinationsList, setDestinationsList] = useState([]);
@@ -53,9 +53,18 @@ const Destinations = () => {
     }
   };
 
+  const handleOnClickOfSingleDestination = (singleDestination) => {
+    // console.log("singleDestination :", singleDestination);
+    navigation(`/single-card/${singleDestination?._id}`);
+  };
+
   // useEffect(() => {
   //   fetchDestinationsList();
   // }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (cityId) {
@@ -143,7 +152,11 @@ const Destinations = () => {
             ) : destinationsList && destinationsList?.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
                 {destinationsList.map((item, index) => (
-                  <div className="relative w-full border-b" key={index}>
+                  <div
+                    className="relative w-full border-b cursor-pointer"
+                    key={index}
+                    onClick={() => handleOnClickOfSingleDestination(item)}
+                  >
                     <div className="w-full h-[300px] rounded-lg shadow-lg overflow-hidden">
                       <div className="absolute z-10 py-2 px-4 sm:px-6 lg:px-14 text-white bg-gradient-to-r from-black/80 to-black/40 top-0 rounded-md w-full">
                         <h2 className="text-sm sm:text-lg lg:text-xl font-bold text-center">

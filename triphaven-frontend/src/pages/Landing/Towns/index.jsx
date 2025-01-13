@@ -36,7 +36,7 @@ const Towns = () => {
 
   const handleDestinationsClick = (city) => {
     console.log('city :', city)
-    navigate(`/traveller/destinations/${city._id}`)
+    navigate(`/destinations/${city._id}`)
   }
 
   const CityCard = ({ city, reverseOrder }) => (
@@ -58,6 +58,10 @@ const Towns = () => {
       </div>
     </div>
   );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     fetchCityList();

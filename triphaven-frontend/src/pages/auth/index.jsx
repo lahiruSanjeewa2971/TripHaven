@@ -76,7 +76,7 @@ const AuthPage = () => {
         if (response?.data?.user?.role === "admin") {
           navigate("/admin");
         } else {
-          navigate("/traveller");
+          navigate("/");
         }
       } else {
         toast.error("Login failed: Invalid credentials");
@@ -103,7 +103,7 @@ const AuthPage = () => {
         const response = await registerUser(signUpFormData)
         if(response.success){
           toast.success(`${response?.message}`);
-          navigate("/traveller");
+          navigate("/");
         } else {
           toast.error("Register failed");
         }

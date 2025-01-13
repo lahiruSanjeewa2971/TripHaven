@@ -40,9 +40,9 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<AuthPage />} />
+        <Route path="/auth" element={<AuthPage />} />
 
-        <Route path="/traveller" element={<LandingPageCommonLayout />}>
+        <Route path="/" element={<LandingPageCommonLayout />}>
           <Route path="" element={<LandingPage />} />
           <Route path="towns" element={<Towns />} />
           <Route path="destinations" element={<Destinations />} />
