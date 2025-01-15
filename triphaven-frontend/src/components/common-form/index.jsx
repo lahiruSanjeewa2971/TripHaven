@@ -8,7 +8,7 @@ const CommonForm = ({
   formControls = [],
   formData,
   setFormData,
-  isButtonDisabled = false,
+  isButtonStyleDisabled = false,
 }) => {
   return (
     <form onSubmit={handleSubmit}>
@@ -16,10 +16,11 @@ const CommonForm = ({
         formData={formData}
         setFormData={setFormData}
         formControls={formControls}
+        isButtonStyleDisabled={isButtonStyleDisabled}
       />
       <Button
         type="submit"
-        className="mt-5 w-full hover:bg-black hover:text-white"
+        className={`mt-5 w-full hover:bg-black hover:text-white ${isButtonStyleDisabled && ' bg-black text-white'}`}
       >
         {buttonText || "Submit"}
       </Button>

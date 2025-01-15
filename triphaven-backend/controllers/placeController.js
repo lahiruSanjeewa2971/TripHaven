@@ -61,7 +61,7 @@ const getSingleDestinationById = async (req, res) => {
     try {
         const {id} = req.params;
 
-        const destinationDetails = await Destination.findById(id)
+        const destinationDetails = await Destination.findById(id).populate('town', 'townName');
 
         if (!destinationDetails) {
             return res.status(404).json({

@@ -38,3 +38,20 @@ export const signUpFormControls = [
         componentType: "input"
     },
 ]
+
+export const userFeedbackForDestinationFormControls = [
+    {
+        name: "rating",
+        label: "Rating",
+        placeholder: "Rate this place.",
+        type: "text",
+        componentType: "input"
+    },
+    {
+        name: "comment",
+        label: "Comment",
+        placeholder: "How is the place.",
+        type: "text",
+        componentType: "textarea"
+    },
+]
