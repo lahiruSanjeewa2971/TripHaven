@@ -3,7 +3,7 @@ import { userFeedbackForDestinationFormControls } from "@/config";
 import { getDestinationDetailsById } from "@/restAPI/DestinationAPI";
 import { Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const tempFeedbacks = [
@@ -12,7 +12,7 @@ const tempFeedbacks = [
     rating: 4,
     comment:
       "Discover the most beautiful and captivating places around the world with us. Whether you're planning your next adventure or simply exploring from the comfort of your home, our platform offers stunning destinations, hidden gems, and travel tips to inspire your journey. Let us help you find the perfect place to relax, explore, and create unforgettable memories.",
-    destination: "1",
+    // destination: "1",
     userName: "User 1",
   },
   {
@@ -20,20 +20,21 @@ const tempFeedbacks = [
     rating: 5,
     comment:
       "Discover the most beautiful and captivating places around the world with us. Whether you're planning your next adventure or simply exploring from the comfort of your home, our platform offers stunning destinations, hidden gems, and travel tips to inspire your journey. Let us help you find the perfect place to relax, explore, and create unforgettable memories.",
-    destination: "1",
+    // destination: "1",
     userName: "User 2",
   },
   {
-    _id: 1,
+    _id: 3,
     rating: 5,
     comment:
       "Discover the most beautiful and captivating places around the world with us. Whether you're planning your next adventure or simply exploring from the comfort of your home, our platform offers stunning destinations, hidden gems, and travel tips to inspire your journey. Let us help you find the perfect place to relax, explore, and create unforgettable memories.",
-    destination: "1",
+    // destination: "1",
     userName: "User 3",
   },
 ];
 
 const FullViewOfSingleCard = () => {
+  const navigate = useNavigate();
   const { itemId } = useParams();
   const [fullDetailsOfDestination, setFullDetailsOfDestination] = useState({});
   const [loading, setLoading] = useState(false);
@@ -58,7 +59,10 @@ const FullViewOfSingleCard = () => {
 
   const handleSendUserFeedback = () => {
     try {
-      console.log("Clicked handleSendUserFeedback");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/auth", { state: { from: "/single-card" } });
+      }
     } catch (error) {
       console.log("Error in handleSendUserFeedback :", error);
       toast.error("Failed to submit feedback.");
