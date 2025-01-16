@@ -13,11 +13,12 @@ import {
   loginStart,
   loginSuccess,
 } from "@/redux/slices/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AuthPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState("signin");
   const [signInFormData, setSignInFormData] = useState({
     email: "",
@@ -52,8 +53,7 @@ const AuthPage = () => {
 
   const handleLoginUser = async (event) => {
     event.preventDefault();
-    // console.log("data :", signInFormData);
-
+    // here we check where the user came from, and if certain one matches redirect to there after login
     if (
       signInFormData.password === null ||
       signInFormData.password === "" ||
@@ -73,7 +73,12 @@ const AuthPage = () => {
         };
         dispatch(loginSuccess(payload));
         toast.success(`${response?.message}`);
-        if (response?.data?.user?.role === "admin") {
+
+        const previousLocation = location.state?.from;
+        console.log('previousLocation :', previousLocation)
+        if (previousLocation.includes("/single-card")) {
+          navigate(-1);
+        } else if (response?.data?.user?.role === "admin") {
           navigate("/admin");
         } else {
           navigate("/");
@@ -87,7 +92,7 @@ const AuthPage = () => {
       toast.error(`Login failed: ${error.message}`);
     }
   };
-  
+
   const handleRegisterUser = async (event) => {
     try {
       event.preventDefault();
@@ -100,8 +105,8 @@ const AuthPage = () => {
       ) {
         toast.warning("Invalid password. Please enter a valid password.");
       } else {
-        const response = await registerUser(signUpFormData)
-        if(response.success){
+        const response = await registerUser(signUpFormData);
+        if (response.success) {
           toast.success(`${response?.message}`);
           navigate("/");
         } else {
