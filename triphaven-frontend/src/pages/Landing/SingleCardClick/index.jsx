@@ -1,8 +1,10 @@
 import CommonForm from "@/components/common-form";
 import { userFeedbackForDestinationFormControls } from "@/config";
 import { getDestinationDetailsById } from "@/restAPI/DestinationAPI";
+import { PostUserFeedbackOnDestination } from "@/restAPI/FeedbackAPI";
 import { Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -34,6 +36,7 @@ const tempFeedbacks = [
 ];
 
 const FullViewOfSingleCard = () => {
+  const {userData} = useSelector(state => state.auth)
   const navigate = useNavigate();
   const { itemId } = useParams();
   const [fullDetailsOfDestination, setFullDetailsOfDestination] = useState({});
@@ -47,7 +50,7 @@ const FullViewOfSingleCard = () => {
     setLoading(true);
     try {
       const response = await getDestinationDetailsById(itemId);
-      // console.log("getDestinationDetailsById :", response);
+
       setFullDetailsOfDestination(response.data);
       setLoading(false);
     } catch (error) {
@@ -57,7 +60,7 @@ const FullViewOfSingleCard = () => {
     }
   };
 
-  const handleSendUserFeedback = (e) => {
+  const handleSendUserFeedback = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
@@ -65,11 +68,22 @@ const FullViewOfSingleCard = () => {
       if (!token) {
         navigate("/auth", { state: { from: "/single-card" } });
       } else {
-        console.log("values :", userFeedbackData);
         const feedbackPayload = {
-          ...userFeedbackData
+          userId: userData?._id,
+          feedback: userFeedbackData.comment,
+          rating: userFeedbackData.rating,
+          destination: itemId
         }
-        console.log("feedbackPayload :", feedbackPayload);
+        
+        const response = await PostUserFeedbackOnDestination(feedbackPayload, token);
+        // console.log('feedback response:', response)
+        if(response.success){
+          toast.success("Your feedback was added.")
+          setUserFeedbackData({rating: 0, comment: ''})
+        } else{
+          toast.error("Your feedback was not added.")
+          // console.log(first)
+        }
       }
     } catch (error) {
       console.log("Error in handleSendUserFeedback :", error);
@@ -129,6 +143,7 @@ const FullViewOfSingleCard = () => {
                             Place your thoughts.
                           </h1>
                           <CommonForm
+                            key={JSON.stringify(userFeedbackData)}
                             formControls={
                               userFeedbackForDestinationFormControls
                             }
