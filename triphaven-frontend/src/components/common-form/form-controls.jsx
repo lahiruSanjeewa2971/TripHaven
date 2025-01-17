@@ -23,6 +23,7 @@ const FormControls = ({ formControls = [], formData, setFormData, isButtonStyleD
             placeholder={getControlItem.placeholder}
             type={getControlItem.type}
             value={value || ""}
+            required={getControlItem?.isRequired}
             onChange={(event) =>
               setFormData({
                 ...formData,
@@ -67,6 +68,7 @@ const FormControls = ({ formControls = [], formData, setFormData, isButtonStyleD
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
             value={value}
+            required={getControlItem?.isRequired}
             onChange={(event) =>
               setFormData({
                 ...formData,

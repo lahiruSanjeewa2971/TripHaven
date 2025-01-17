@@ -39,7 +39,7 @@ const FullViewOfSingleCard = () => {
   const [fullDetailsOfDestination, setFullDetailsOfDestination] = useState({});
   const [loading, setLoading] = useState(false);
   const [userFeedbackData, setUserFeedbackData] = useState({
-    rating: "",
+    rating: 0,
     comment: "",
   });
 
@@ -47,7 +47,7 @@ const FullViewOfSingleCard = () => {
     setLoading(true);
     try {
       const response = await getDestinationDetailsById(itemId);
-      console.log("getDestinationDetailsById :", response);
+      // console.log("getDestinationDetailsById :", response);
       setFullDetailsOfDestination(response.data);
       setLoading(false);
     } catch (error) {
@@ -57,11 +57,19 @@ const FullViewOfSingleCard = () => {
     }
   };
 
-  const handleSendUserFeedback = () => {
+  const handleSendUserFeedback = (e) => {
+    e.preventDefault();
     try {
       const token = localStorage.getItem("token");
+
       if (!token) {
         navigate("/auth", { state: { from: "/single-card" } });
+      } else {
+        console.log("values :", userFeedbackData);
+        const feedbackPayload = {
+          ...userFeedbackData
+        }
+        console.log("feedbackPayload :", feedbackPayload);
       }
     } catch (error) {
       console.log("Error in handleSendUserFeedback :", error);

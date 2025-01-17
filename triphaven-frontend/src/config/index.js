@@ -44,14 +44,16 @@ export const userFeedbackForDestinationFormControls = [
         name: "rating",
         label: "Rating",
         placeholder: "Rate this place.",
-        type: "text",
-        componentType: "input"
+        type: "number",
+        componentType: "input",
+        isRequired: true
     },
     {
         name: "comment",
         label: "Comment",
         placeholder: "How is the place.",
         type: "text",
-        componentType: "textarea"
+        componentType: "textarea",
+        isRequired: true
     },
 ]

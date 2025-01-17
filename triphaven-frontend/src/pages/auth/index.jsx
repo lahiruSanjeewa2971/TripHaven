@@ -76,7 +76,7 @@ const AuthPage = () => {
 
         const previousLocation = location.state?.from;
         console.log('previousLocation :', previousLocation)
-        if (previousLocation.includes("/single-card")) {
+        if (previousLocation && previousLocation.includes("/single-card")) {
           navigate(-1);
         } else if (response?.data?.user?.role === "admin") {
           navigate("/admin");
