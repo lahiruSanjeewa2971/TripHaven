@@ -1,7 +1,11 @@
 import CommonForm from "@/components/common-form";
+import CommonReusablaForm from "@/components/common-form/form(another-way)";
 import { userFeedbackForDestinationFormControls } from "@/config";
 import { getDestinationDetailsById } from "@/restAPI/DestinationAPI";
-import { PostUserFeedbackOnDestination } from "@/restAPI/FeedbackAPI";
+import {
+  GetUserFeedbackOnDestination,
+  PostUserFeedbackOnDestination,
+} from "@/restAPI/FeedbackAPI";
 import { Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -36,15 +40,16 @@ const tempFeedbacks = [
 ];
 
 const FullViewOfSingleCard = () => {
-  const {userData} = useSelector(state => state.auth)
+  const { userData } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const { itemId } = useParams();
   const [fullDetailsOfDestination, setFullDetailsOfDestination] = useState({});
   const [loading, setLoading] = useState(false);
-  const [userFeedbackData, setUserFeedbackData] = useState({
-    rating: 0,
-    comment: "",
-  });
+  const [formSubmitting, setFormSubmitting] = useState(false);
+  // const [userFeedbackData, setUserFeedbackData] = useState({
+  //   rating: 0,
+  //   comment: "",
+  // });
 
   const fetchFullDataofSingleDestination = async (itemId) => {
     setLoading(true);
@@ -60,28 +65,43 @@ const FullViewOfSingleCard = () => {
     }
   };
 
-  const handleSendUserFeedback = async (e) => {
-    e.preventDefault();
+  const fetchUserFeedbackOnDestination = async (itemId) => {
+    try {
+      const response = await GetUserFeedbackOnDestination(itemId);
+      console.log("GetUserFeedbackOnDestination :", response);
+    } catch (error) {
+      console.log("Error in fetchUserFeedbackOnDestination :", error);
+    }
+  };
+
+  // const handleSendUserFeedback = async (data) => {
+  const handleFeedbackSend = async (data) => {
+    // e.preventDefault();
     try {
       const token = localStorage.getItem("token");
 
       if (!token) {
         navigate("/auth", { state: { from: "/single-card" } });
       } else {
+        setFormSubmitting(true);
         const feedbackPayload = {
           userId: userData?._id,
-          feedback: userFeedbackData.comment,
-          rating: userFeedbackData.rating,
-          destination: itemId
-        }
-        
-        const response = await PostUserFeedbackOnDestination(feedbackPayload, token);
-        // console.log('feedback response:', response)
-        if(response.success){
-          toast.success("Your feedback was added.")
-          setUserFeedbackData({rating: 0, comment: ''})
-        } else{
-          toast.error("Your feedback was not added.")
+          feedback: data.comment,
+          rating: data.rating,
+          destination: itemId,
+        };
+
+        const response = await PostUserFeedbackOnDestination(
+          feedbackPayload,
+          token
+        );
+        console.log("feedback response:", response);
+        if (response.success) {
+          setFormSubmitting(false);
+          // toast.success("Your feedback was added.");
+        } else {
+          setFormSubmitting(false);
+          // toast.error("Your feedback was not added.");
           // console.log(first)
         }
       }
@@ -92,10 +112,21 @@ const FullViewOfSingleCard = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (itemId) {
       fetchFullDataofSingleDestination(itemId);
     }
   }, [itemId]);
+
+  useEffect(() => {
+    if (itemId) {
+      fetchUserFeedbackOnDestination(itemId);
+    }
+  }, [itemId]);
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-center ">
@@ -142,7 +173,11 @@ const FullViewOfSingleCard = () => {
                           <h1 className="text-2xl py-2">
                             Place your thoughts.
                           </h1>
-                          <CommonForm
+                          <CommonReusablaForm
+                            onSubmit={handleFeedbackSend}
+                            formSubmitting={formSubmitting}
+                          />
+                          {/* <CommonForm
                             key={JSON.stringify(userFeedbackData)}
                             formControls={
                               userFeedbackForDestinationFormControls
@@ -152,7 +187,7 @@ const FullViewOfSingleCard = () => {
                             setFormData={setUserFeedbackData}
                             isButtonStyleDisabled={true}
                             handleSubmit={handleSendUserFeedback}
-                          />
+                          /> */}
                         </div>
                       </div>
                     </div>

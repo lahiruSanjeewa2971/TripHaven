@@ -16,3 +16,15 @@ export const PostUserFeedbackOnDestination = async (feedbackRecord, token) => {
         };
     }
 }
+export const GetUserFeedbackOnDestination = async (destinationId) => {
+    try {
+        const response = await axios.get(`${API_URL}/feedback/get-feedback-for-destination/${destinationId}`)
+        return response.data;
+    } catch (error) {
+        console.log('Error in GetUserFeedbackOnDestination details. :', error)
+        throw {
+            status: error.response?.status || 500,
+            message: error.response?.data?.message || "Something went wrong. Please try again.",
+        };
+    }
+}
