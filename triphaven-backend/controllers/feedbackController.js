@@ -4,22 +4,23 @@ const User = require("../models/User");
 
 const addNewFeedback = async (req, res) => {
     try {
-        const { userName, feedback, rating, destination } = req.body;
+        const { userId, feedback, rating, destination } = req.body;
 
-        const checkDestinationExist = await Destination.findOne({ destination })
+        const checkDestinationExist = await Destination.findOne({ _id: destination })
+
         if (!checkDestinationExist) return res.status(404).json({
             success: false,
             message: 'This destination is not in our system.'
         })
 
-        const checkUserNameExist = await User.findOne({ userName })
+        const checkUserNameExist = await User.findOne({ _id: userId })
         if (!checkUserNameExist) return res.status(404).json({
             success: false,
             message: 'This user name is not in our system.'
         })
 
         const newFeedback = new Feedback({
-            userName, feedback, rating, destination
+            userId, feedback, rating, destination
         })
         const saveFeedback = await newFeedback.save()
 

@@ -1,53 +1,31 @@
 import CommonForm from "@/components/common-form";
+import CommonReusablaForm from "@/components/common-form/form(another-way)";
 import { userFeedbackForDestinationFormControls } from "@/config";
 import { getDestinationDetailsById } from "@/restAPI/DestinationAPI";
+import {
+  GetUserFeedbackOnDestination,
+  PostUserFeedbackOnDestination,
+} from "@/restAPI/FeedbackAPI";
 import { Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const tempFeedbacks = [
-  {
-    _id: 1,
-    rating: 4,
-    comment:
-      "Discover the most beautiful and captivating places around the world with us. Whether you're planning your next adventure or simply exploring from the comfort of your home, our platform offers stunning destinations, hidden gems, and travel tips to inspire your journey. Let us help you find the perfect place to relax, explore, and create unforgettable memories.",
-    // destination: "1",
-    userName: "User 1",
-  },
-  {
-    _id: 2,
-    rating: 5,
-    comment:
-      "Discover the most beautiful and captivating places around the world with us. Whether you're planning your next adventure or simply exploring from the comfort of your home, our platform offers stunning destinations, hidden gems, and travel tips to inspire your journey. Let us help you find the perfect place to relax, explore, and create unforgettable memories.",
-    // destination: "1",
-    userName: "User 2",
-  },
-  {
-    _id: 3,
-    rating: 5,
-    comment:
-      "Discover the most beautiful and captivating places around the world with us. Whether you're planning your next adventure or simply exploring from the comfort of your home, our platform offers stunning destinations, hidden gems, and travel tips to inspire your journey. Let us help you find the perfect place to relax, explore, and create unforgettable memories.",
-    // destination: "1",
-    userName: "User 3",
-  },
-];
-
 const FullViewOfSingleCard = () => {
+  const { userData } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const { itemId } = useParams();
   const [fullDetailsOfDestination, setFullDetailsOfDestination] = useState({});
+  const [userFeedbacks, setUserFeedbacks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [userFeedbackData, setUserFeedbackData] = useState({
-    rating: 0,
-    comment: "",
-  });
+  const [formSubmitting, setFormSubmitting] = useState(false);
 
   const fetchFullDataofSingleDestination = async (itemId) => {
     setLoading(true);
     try {
       const response = await getDestinationDetailsById(itemId);
-      // console.log("getDestinationDetailsById :", response);
+
       setFullDetailsOfDestination(response.data);
       setLoading(false);
     } catch (error) {
@@ -57,19 +35,50 @@ const FullViewOfSingleCard = () => {
     }
   };
 
-  const handleSendUserFeedback = (e) => {
-    e.preventDefault();
+  const fetchUserFeedbackOnDestination = async (itemId) => {
+    try {
+      const response = await GetUserFeedbackOnDestination(itemId);
+      // console.log("GetUserFeedbackOnDestination :", response);
+      if (response.success) {
+        setUserFeedbacks(response?.data);
+      } else {
+        setUserFeedbacks([]);
+      }
+    } catch (error) {
+      console.log("Error in fetchUserFeedbackOnDestination :", error);
+    }
+  };
+
+  // const handleSendUserFeedback = async (data) => {
+  const handleFeedbackSend = async (data) => {
+    // e.preventDefault();
     try {
       const token = localStorage.getItem("token");
 
       if (!token) {
         navigate("/auth", { state: { from: "/single-card" } });
       } else {
-        console.log("values :", userFeedbackData);
+        setFormSubmitting(true);
         const feedbackPayload = {
-          ...userFeedbackData
+          userId: userData?._id,
+          feedback: data.comment,
+          rating: data.rating,
+          destination: itemId,
+        };
+
+        const response = await PostUserFeedbackOnDestination(
+          feedbackPayload,
+          token
+        );
+        console.log("feedback response:", response);
+        if (response.success) {
+          setFormSubmitting(false);
+          // toast.success("Your feedback was added.");
+        } else {
+          setFormSubmitting(false);
+          // toast.error("Your feedback was not added.");
+          // console.log(first)
         }
-        console.log("feedbackPayload :", feedbackPayload);
       }
     } catch (error) {
       console.log("Error in handleSendUserFeedback :", error);
@@ -78,10 +87,21 @@ const FullViewOfSingleCard = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (itemId) {
       fetchFullDataofSingleDestination(itemId);
     }
   }, [itemId]);
+
+  useEffect(() => {
+    if (itemId) {
+      fetchUserFeedbackOnDestination(itemId);
+    }
+  }, [itemId, formSubmitting]);
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-center ">
@@ -128,7 +148,12 @@ const FullViewOfSingleCard = () => {
                           <h1 className="text-2xl py-2">
                             Place your thoughts.
                           </h1>
-                          <CommonForm
+                          <CommonReusablaForm
+                            onSubmit={handleFeedbackSend}
+                            formSubmitting={formSubmitting}
+                          />
+                          {/* <CommonForm
+                            key={JSON.stringify(userFeedbackData)}
                             formControls={
                               userFeedbackForDestinationFormControls
                             }
@@ -137,7 +162,7 @@ const FullViewOfSingleCard = () => {
                             setFormData={setUserFeedbackData}
                             isButtonStyleDisabled={true}
                             handleSubmit={handleSendUserFeedback}
-                          />
+                          /> */}
                         </div>
                       </div>
                     </div>
@@ -163,21 +188,21 @@ const FullViewOfSingleCard = () => {
           </h2>
 
           <div className="w-full">
-            {tempFeedbacks.length > 0 ? (
+            {userFeedbacks.length > 0 ? (
               <>
-                {tempFeedbacks.map((singleFeedback, index) => (
+                {userFeedbacks.map((singleUserFeedback, index) => (
                   <div
-                    key={singleFeedback._id}
+                    key={singleUserFeedback._id}
                     className="p-4 border rounded shadow-md mb-5 flex flex-col"
                   >
                     <p className="flex justify-start pb-3">
-                      {singleFeedback.comment}
+                      {singleUserFeedback.feedback}
                     </p>
 
                     <div className="flex items-center">
                       {Array.from({ length: 5 }).map((_, starIndex) => (
                         <span key={starIndex}>
-                          {starIndex < singleFeedback.rating ? (
+                          {starIndex < singleUserFeedback.rating ? (
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="currentColor"
@@ -206,7 +231,9 @@ const FullViewOfSingleCard = () => {
                       ))}
                     </div>
 
-                    <span className="pt-3">{singleFeedback.userName}</span>
+                    <span className="pt-3">
+                      {singleUserFeedback?.userId?.userName}
+                    </span>
                   </div>
                 ))}
               </>
