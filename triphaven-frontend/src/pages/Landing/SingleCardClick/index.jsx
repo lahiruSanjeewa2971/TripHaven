@@ -12,44 +12,14 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const tempFeedbacks = [
-  {
-    _id: 1,
-    rating: 4,
-    comment:
-      "Discover the most beautiful and captivating places around the world with us. Whether you're planning your next adventure or simply exploring from the comfort of your home, our platform offers stunning destinations, hidden gems, and travel tips to inspire your journey. Let us help you find the perfect place to relax, explore, and create unforgettable memories.",
-    // destination: "1",
-    userName: "User 1",
-  },
-  {
-    _id: 2,
-    rating: 5,
-    comment:
-      "Discover the most beautiful and captivating places around the world with us. Whether you're planning your next adventure or simply exploring from the comfort of your home, our platform offers stunning destinations, hidden gems, and travel tips to inspire your journey. Let us help you find the perfect place to relax, explore, and create unforgettable memories.",
-    // destination: "1",
-    userName: "User 2",
-  },
-  {
-    _id: 3,
-    rating: 5,
-    comment:
-      "Discover the most beautiful and captivating places around the world with us. Whether you're planning your next adventure or simply exploring from the comfort of your home, our platform offers stunning destinations, hidden gems, and travel tips to inspire your journey. Let us help you find the perfect place to relax, explore, and create unforgettable memories.",
-    // destination: "1",
-    userName: "User 3",
-  },
-];
-
 const FullViewOfSingleCard = () => {
   const { userData } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const { itemId } = useParams();
   const [fullDetailsOfDestination, setFullDetailsOfDestination] = useState({});
+  const [userFeedbacks, setUserFeedbacks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
-  // const [userFeedbackData, setUserFeedbackData] = useState({
-  //   rating: 0,
-  //   comment: "",
-  // });
 
   const fetchFullDataofSingleDestination = async (itemId) => {
     setLoading(true);
@@ -68,7 +38,12 @@ const FullViewOfSingleCard = () => {
   const fetchUserFeedbackOnDestination = async (itemId) => {
     try {
       const response = await GetUserFeedbackOnDestination(itemId);
-      console.log("GetUserFeedbackOnDestination :", response);
+      // console.log("GetUserFeedbackOnDestination :", response);
+      if (response.success) {
+        setUserFeedbacks(response?.data);
+      } else {
+        setUserFeedbacks([]);
+      }
     } catch (error) {
       console.log("Error in fetchUserFeedbackOnDestination :", error);
     }
@@ -125,7 +100,7 @@ const FullViewOfSingleCard = () => {
     if (itemId) {
       fetchUserFeedbackOnDestination(itemId);
     }
-  }, [itemId]);
+  }, [itemId, formSubmitting]);
 
   return (
     <div className="flex flex-col">
@@ -213,21 +188,21 @@ const FullViewOfSingleCard = () => {
           </h2>
 
           <div className="w-full">
-            {tempFeedbacks.length > 0 ? (
+            {userFeedbacks.length > 0 ? (
               <>
-                {tempFeedbacks.map((singleFeedback, index) => (
+                {userFeedbacks.map((singleUserFeedback, index) => (
                   <div
-                    key={singleFeedback._id}
+                    key={singleUserFeedback._id}
                     className="p-4 border rounded shadow-md mb-5 flex flex-col"
                   >
                     <p className="flex justify-start pb-3">
-                      {singleFeedback.comment}
+                      {singleUserFeedback.feedback}
                     </p>
 
                     <div className="flex items-center">
                       {Array.from({ length: 5 }).map((_, starIndex) => (
                         <span key={starIndex}>
-                          {starIndex < singleFeedback.rating ? (
+                          {starIndex < singleUserFeedback.rating ? (
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="currentColor"
@@ -256,7 +231,9 @@ const FullViewOfSingleCard = () => {
                       ))}
                     </div>
 
-                    <span className="pt-3">{singleFeedback.userName}</span>
+                    <span className="pt-3">
+                      {singleUserFeedback?.userId?.userName}
+                    </span>
                   </div>
                 ))}
               </>
