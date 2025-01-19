@@ -8,7 +8,7 @@ const router = express.Router()
 router.post('/add', authenticate, addNewFeedback)
 
 // common routes
-router.post('/get-all', getFeedbacksByDestinationId)
+router.get('/get-feedback-for-destination/:destinationId', getFeedbacksByDestinationId)
 
 
 module.exports = router
