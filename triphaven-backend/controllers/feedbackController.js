@@ -47,7 +47,14 @@ const addNewFeedback = async (req, res) => {
 
 const getFeedbacksByDestinationId = async (req, res) => {
     try {
-
+        const { destinationId } = req.params;
+        const feedbacks = await Feedback.find({ destination: destinationId }).populate('userId', 'userName');
+        if (feedbacks) {
+            res.status(200).json({
+                success: true,
+                data: feedbacks
+            })
+        }
     } catch (error) {
         console.log('Error in getFeedbacksByDestinationId :', error)
         res.status(500).json({
