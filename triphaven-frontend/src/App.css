@@ -40,3 +40,12 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Hide scrollbar for all elements */
+* {
+  scrollbar-width: none;  /* For Firefox */
+}
+
+*::-webkit-scrollbar {
+  display: none;  /* For Chrome, Safari, and Edge */
+}
