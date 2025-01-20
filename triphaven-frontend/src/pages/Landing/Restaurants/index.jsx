@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import restaurantPage from "../../../assets/images/restaurant03.jpg";
 import restaurantPageHeader from "../../../assets/images/restaurant-header.jpg";
+import restaurantPageBackground from "../../../assets/images/restaurant04.jpg";
 import { getCitiesWithRestaurantsList } from "@/restAPI/CityAPI";
 import { toast } from "react-toastify";
 import { Loader } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 const Restaurants = () => {
   const [loading, setLoading] = useState(false);
@@ -85,115 +87,84 @@ const Restaurants = () => {
         </div>
       </div>
 
-      <div className="bg-gradient-to-b from-gray-200 to-[#000000]">
-      {/* <div className="w-full"> */}
-        <div className="py-14 flex items-center justify-center flex-col">
-          <h1 className="text-5xl font-bold font-playwrite">Our Restaurants.</h1>
+      <section className="relative h-screen w-full overflow-hidden p-4">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${restaurantPageBackground})`,
+          }}
+        ></div>
+        <div className="relative z-10 h-full overflow-y-auto bg-white/35 backdrop-blur-none" style={{
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
+        }}>
+          <div className="py-14 flex items-center justify-center flex-col">
+            <h1 className="text-5xl font-bold font-playwrite text-center">
+              Our Restaurants.
+            </h1>
 
-          {loading ? (
-            <div className="flex items-center justify-center space-x-2 mt-5">
-              <Loader className="animate-spin w-5 h-5" />
-              <span>Loading...</span>
+            <div className="my-5 sm:w-3/4 w-full px-4">
+              <Input type="text" className="w-full border-none bg-white text-black rounded-xl" placeholder="Search Restaurants..." />
             </div>
-          ) : townWithRestaurantList && townWithRestaurantList.length > 0 ? (
-            <div className="mt-5 w-full flex flex-wrap justify-center sm:justify-start border-b">
-              
-              {townWithRestaurantList.map((town, index) => (
-                <div key={index} className="mb-10">
-                  <h2 className="text-2xl font-semibold px-32 ">
-                    {town.townName}
-                  </h2>
-                  {town.restaurants.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4 ">
-                      {town.restaurants.map((restaurant) => (
-                        <Card
-                          key={restaurant._id}
-                          className="h-[350px] relative overflow-hidden "
-                        >
-                          <img
-                            alt={restaurant.restaurantName}
-                            src={restaurant.image}
-                            className="absolute inset-0 w-full h-full object-cover transition-transform transform hover:scale-110"
-                          />
-                          <div className="relative z-10 w-full h-full bg-black/30 text-white p-6 flex flex-col justify-end">
-                            <div className="absolute top-5 left-6 right-6 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
-                              <p className="text-lg font-semibold">
-                                {restaurant.restaurantName}
-                              </p>
-                              <p className="text-sm">
-                                <strong>Rating:</strong> {restaurant.rating} ⭐
+            {loading ? (
+              <></>
+            ) : townWithRestaurantList && townWithRestaurantList.length > 0 ? (
+              <div className="mt-5 w-full flex flex-wrap justify-center sm:justify-start">
+                {townWithRestaurantList.map((town, index) => (
+                  <div key={index} className="mb-10">
+                    <h2 className="text-2xl font-semibold px-32 ">
+                      {town.townName}
+                    </h2>
+                    {town.restaurants.length > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4 ">
+                        {town.restaurants.map((restaurant) => (
+                          <Card
+                            key={restaurant._id}
+                            className="h-[350px] relative overflow-hidden "
+                          >
+                            <img
+                              alt={restaurant.restaurantName}
+                              src={restaurant.image}
+                              className="absolute inset-0 w-full h-full object-cover transition-transform transform hover:scale-110"
+                            />
+                            <div className="relative z-10 w-full h-full bg-black/30 text-white p-6 flex flex-col justify-end">
+                              <div className="absolute top-5 left-6 right-6 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+                                <p className="text-lg font-semibold">
+                                  {restaurant.restaurantName}
+                                </p>
+                                <p className="text-sm">
+                                  <strong>Rating:</strong> {restaurant.rating}{" "}
+                                  ⭐
+                                </p>
+                              </div>
+
+                              <p className="mt-6 text-sm sm:text-base">
+                                {restaurant.description}
                               </p>
                             </div>
-
-                            <p className="mt-6 text-sm sm:text-base">
-                              {restaurant.description}
-                            </p>
-                          </div>
-                        </Card>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-gray-500 mt-2">
-                      No restaurants available in this town.
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <span className="flex items-center justify-center mt-5">
-              No data
-            </span>
-          )}
+                          </Card>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-gray-500 mt-2">
+                        No restaurants available in this town.
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <>
+                <span className="flex items-center justify-center mt-5">
+                  No data
+                </span>
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
 
 export default Restaurants;
-
-
-{
-  /**
-   * const destinationArray = [
-  { _id: "1", image: "image1.jpg" },
-  { _id: "2", image: "image2.jpg" },
-  { _id: "3", image: "image3.jpg" },
-  { _id: "4", image: "image4.jpg" },
-];
-
-const GridComponent = () => {
-  // Define colSpan and rowSpan based on position or predefined rules
-  const gridPositions = [
-    { colSpan: 3, rowSpan: 4 },
-    { colSpan: 3, rowSpan: 3 },
-    { colSpan: 2, rowSpan: 3 },
-    { colSpan: 3, rowSpan: 5 },
-  ];
-
-  return (
-    <div className="w-full p-6 h-full grid grid-cols-6 grid-rows-9 gap-3 mt-2">
-      {destinationArray.map((item, index) => {
-        const position = gridPositions[index] || { colSpan: 1, rowSpan: 1 }; // Fallback for extra items
-        return (
-          <div
-            key={item._id}
-            className={`col-span-${position.colSpan} row-span-${position.rowSpan} flex items-center justify-center overflow-hidden rounded-[5%]`}
-          >
-            <img
-              src={item.image}
-              alt={`Destination ${item._id}`}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        );
-      })}
-    </div>
-  );
-};
-
-export default GridComponent;
-
-   */
-}
