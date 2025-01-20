@@ -190,7 +190,7 @@ const Destinations = () => {
             ) : cityId && cityWithDestinations?.destinations?.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
                 {cityWithDestinations?.destinations.map((item, index) => (
-                  <div className="relative w-full border-b" key={index}>
+                  <div className="relative w-full border-b cursor-pointer" key={index} onClick={() => handleOnClickOfSingleDestination(item)}>
                     <div className="w-full h-[300px] rounded-lg shadow-lg overflow-hidden">
                       <div className="absolute z-10 py-2 px-4 sm:px-6 lg:px-14 text-white bg-gradient-to-r from-black/80 to-black/40 top-0 rounded-md w-full">
                         <h2 className="text-sm sm:text-lg lg:text-xl font-bold text-center">
