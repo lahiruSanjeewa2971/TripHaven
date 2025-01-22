@@ -1,20 +1,33 @@
 import { logout } from "@/redux/slices/authSlice";
-import { LogIn, LogInIcon, Menu } from "lucide-react";
+import { LogInIcon, Menu } from "lucide-react";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+
+const navItems = [
+  { path: "/", label: "Home" },
+  { path: "/towns", label: "Towns" },
+  { path: "/destinations", label: "Destinations" },
+  { path: "/restaurants", label: "Restaurants" },
+];
 
 const LandingPageCommonHeader = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const token = localStorage.getItem("token");
-  // console.log('token', token)
+
+  const isActive = (path) => {
+    // Special handling for the home path, avoid highlighting on root `/`
+    if (path === "/" && location.pathname !== "/") {
+      return false;
+    }
+    return location.pathname.startsWith(path);
+  };
 
   return (
-    // <header className="sticky top-0 z-50 bg-transparent shadow-md transition-all duration-300 flex items-center justify-between bg-opacity-5">
     <header
-      className={`sticky top-0 z-50 text-white transition-all duration-300 flex items-center justify-between ${
+      className={`sticky top-0 z-50 text-white transition-all duration-300 flex items-center justify-between px-14 ${
         location.pathname.includes("towns")
           ? "bg-headerForTownsBackgroundColor"
           : location.pathname.includes("destinations")
@@ -25,35 +38,30 @@ const LandingPageCommonHeader = () => {
       }`}
     >
       <div
-        className="p-4 text-xl font-bold font-poppins cursor-pointer"
+        className="p-4 text-3xl font-bold font-poppins cursor-pointer"
         onClick={() => navigate("/")}
       >
         TripHeaven
       </div>
-      <div className="p-4 text-xl font-bold hidden md:flex items-center space-x-4 ">
-        <Link to="/">
-          <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
-            Home
-          </span>
-        </Link>
-        <Link to="/towns">
-          <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
-            Towns
-          </span>
-        </Link>
-        <Link to="/destinations/">
-          <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
-            Destinations
-          </span>
-        </Link>
-        <Link to="/restaurants">
-          <span className="hover:text-red-700 border-b hover:border-red-700 cursor-pointer">
-            Restaurants
-          </span>
-        </Link>
+      <div className="p-4 text-lg font-bold hidden md:flex items-center space-x-6 uppercase">
+        {navItems.map((item) => (
+          <Link key={item.path} to={item.path}>
+            <span
+              className={`cursor-pointer ${
+                isActive(item.path)
+                  ? "text-black"
+                  : "hover:text-white hover:bg-[#68d4ff] hover:rounded-xl hover:p-1 hover:px-4 hover:border-2 hover:border-[#68d4ff]"
+              }`}
+            >
+              {item.label}
+            </span>
+          </Link>
+        ))}
         {token === null ? (
           <Link to="/auth" className="flex items-center justify-center">
-            <span className="rounded-xl p-1 px-4 border-2 border-red-600 hover:bg-red-600">Login</span>
+            <span className="rounded-xl p-1 px-4 border-2 border-[#68d4ff] hover:bg-[#68d4ff]">
+              Login
+            </span>
           </Link>
         ) : (
           <div
