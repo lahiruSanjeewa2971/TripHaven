@@ -27,7 +27,7 @@ const LandingPageCommonHeader = () => {
 
   return (
     <header
-      className={`sticky top-0 z-50 text-white transition-all duration-300 flex items-center justify-between px-14 ${
+      className={`sticky top-0 z-50 text-white transition-all duration-300 flex items-center justify-between lg:px-14 md:px-8 ${
         location.pathname.includes("towns")
           ? "bg-headerForTownsBackgroundColor"
           : location.pathname.includes("destinations")
@@ -43,14 +43,14 @@ const LandingPageCommonHeader = () => {
       >
         TripHeaven
       </div>
-      <div className="p-4 text-lg font-bold hidden md:flex items-center space-x-6 uppercase">
+      <div className="p-4 text-lg font-bold hidden md:flex items-center lg:space-x-6 md:space-x-2 uppercase">
         {navItems.map((item) => (
           <Link key={item.path} to={item.path}>
             <span
               className={`cursor-pointer ${
                 isActive(item.path)
                   ? "text-black"
-                  : "hover:text-white hover:bg-[#68d4ff] hover:rounded-xl hover:p-1 hover:px-4 hover:border-2 hover:border-[#68d4ff]"
+                  : "hover:text-white hover:bg-[#68d4ff] hover:rounded-xl hover:p-1 hover:px-3 hover:border-2 hover:border-[#68d4ff]"
               }`}
             >
               {item.label}
