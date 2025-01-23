@@ -136,7 +136,7 @@ const Destinations = () => {
       <div className="p-3 sm:px-13 md:px-16 lg:px-48">
         <div className="flex flex-col justify-center items-center py-14">
           <div className="flex items-center justify-center text-center">
-            <h1 className="text-5xl font-bold font-playwrite text-center">
+            <h1 className="md:text-5xl sm:text-5xl text-2xl font-bold font-playwrite text-center mt-5 md:mt-0">
               {cityId
                 ? `${cityWithDestinations?.town?.townName}`
                 : "Destinations."}
