@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import restaurantPage from "../../../assets/images/restaurant03.jpg";
 import restaurantPageHeader from "../../../assets/images/restaurant-header.jpg";
-import restaurantPageBackground from "../../../assets/images/restaurant04.jpg";
 import { getCitiesWithRestaurantsList } from "@/restAPI/CityAPI";
 import { toast } from "react-toastify";
 import { Loader } from "lucide-react";
@@ -43,9 +42,9 @@ const Restaurants = () => {
   }, []);
 
   return (
-    <div className="mb-[-0.3rem] bg-[#cee0eb]">
+    <div className="mb-[-0.3rem] bg-[#cee0eb] overflow-hidden">
       <div
-        className="relative bg-cover bg-center bg-no-repeat min-h-screen w-full"
+        className="relative bg-cover bg-center bg-no-repeat h-screen w-full"
         style={{
           backgroundImage: `url(${restaurantPage})`,
           backgroundSize: "cover",
@@ -87,82 +86,91 @@ const Restaurants = () => {
         </div>
       </div>
 
-      <section className="relative h-screen w-full overflow-hidden p-4">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${restaurantPageBackground})`,
-          }}
-        ></div>
-        <div className="relative z-10 h-full overflow-y-auto bg-white/35 backdrop-blur-none" style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none'
-        }}>
-          <div className="py-14 flex items-center justify-center flex-col">
-            <h1 className="text-5xl font-bold font-playwrite text-center">
-              Our Restaurants.
-            </h1>
+      <div className="bg-gradient-to-b from-gray-200 to-[#000000]">
+        <div className="py-14 flex items-center justify-center flex-col">
+          <h1 className="md:text-5xl sm:text-4xl text-xl font-bold font-playwrite text-center">
+            Our Restaurants.
+          </h1>
+          <div className="my-5 sm:w-3/4 w-full px-4">
+            <Input
+              type="text"
+              className="w-full border-none bg-white text-black rounded-xl"
+              placeholder="Search Restaurants..."
+            />
+          </div>
 
-            <div className="my-5 sm:w-3/4 w-full px-4">
-              <Input type="text" className="w-full border-none bg-white text-black rounded-xl" placeholder="Search Restaurants..." />
+          {loading ? (
+            <div className="flex items-center justify-center space-x-2 mt-5">
+              <Loader className="animate-spin w-5 h-5" />
+              <span>Loading...</span>
             </div>
-            {loading ? (
-              <></>
-            ) : townWithRestaurantList && townWithRestaurantList.length > 0 ? (
-              <div className="mt-5 w-full flex flex-wrap justify-center sm:justify-start">
-                {townWithRestaurantList.map((town, index) => (
-                  <div key={index} className="mb-10">
-                    <h2 className="text-2xl font-semibold px-32 ">
-                      {town.townName}
-                    </h2>
-                    {town.restaurants.length > 0 ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4 ">
-                        {town.restaurants.map((restaurant) => (
-                          <Card
-                            key={restaurant._id}
-                            className="h-[350px] relative overflow-hidden "
-                          >
-                            <img
-                              alt={restaurant.restaurantName}
-                              src={restaurant.image}
-                              className="absolute inset-0 w-full h-full object-cover transition-transform transform hover:scale-110"
-                            />
-                            <div className="relative z-10 w-full h-full bg-black/30 text-white p-6 flex flex-col justify-end">
-                              <div className="absolute top-5 left-6 right-6 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
-                                <p className="text-lg font-semibold">
-                                  {restaurant.restaurantName}
-                                </p>
-                                <p className="text-sm">
-                                  <strong>Rating:</strong> {restaurant.rating}{" "}
-                                  ⭐
-                                </p>
-                              </div>
-
-                              <p className="mt-6 text-sm sm:text-base">
-                                {restaurant.description}
-                              </p>
-                            </div>
-                          </Card>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500 mt-2">
-                        No restaurants available in this town.
-                      </p>
-                    )}
+          ) : townWithRestaurantList && townWithRestaurantList.length > 0 ? (
+            <>
+              <div className="my-4 w-full grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 lg:px-36 sm:px-20 px-10 items-center gap-5">
+                {townWithRestaurantList.map((singleRestaurant, index) => (
+                  <div
+                    key={index}
+                    className="bg-red-600 rounded-xl flex justify-center"
+                  >
+                    hi
                   </div>
                 ))}
+                {/* <div className="bg-red-600 rounded-xl flex justify-center">hi</div>
+              <div className="bg-red-600">hi</div>
+              <div className="bg-red-600">hi</div>
+              <div className="bg-red-600">hi</div> */}
               </div>
-            ) : (
-              <>
-                <span className="flex items-center justify-center mt-5">
-                  No data
-                </span>
-              </>
-            )}
-          </div>
+            </>
+          ) : (
+            // <div className="mt-5 w-full flex flex-wrap justify-center sm:justify-start border-b">
+            //   {townWithRestaurantList.map((town, index) => (
+            //     <div key={index} className="mb-10">
+            //       <h2 className="text-2xl font-semibold px-32 ">
+            //         {town.townName}
+            //       </h2>
+            //       {town.restaurants.length > 0 ? (
+            //         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4 ">
+            //           {town.restaurants.map((restaurant) => (
+            //             <Card
+            //               key={restaurant._id}
+            //               className="h-[350px] relative overflow-hidden "
+            //             >
+            //               <img
+            //                 alt={restaurant.restaurantName}
+            //                 src={restaurant.image}
+            //                 className="absolute inset-0 w-full h-full object-cover transition-transform transform hover:scale-110"
+            //               />
+            //               <div className="relative z-10 w-full h-full bg-black/30 text-white p-6 flex flex-col justify-end">
+            //                 <div className="absolute top-5 left-6 right-6 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+            //                   <p className="text-lg font-semibold">
+            //                     {restaurant.restaurantName}
+            //                   </p>
+            //                   <p className="text-sm">
+            //                     <strong>Rating:</strong> {restaurant.rating} ⭐
+            //                   </p>
+            //                 </div>
+
+            //                 <p className="mt-6 text-sm sm:text-base">
+            //                   {restaurant.description}
+            //                 </p>
+            //               </div>
+            //             </Card>
+            //           ))}
+            //         </div>
+            //       ) : (
+            //         <p className="text-gray-500 mt-2">
+            //           No restaurants available in this town.
+            //         </p>
+            //       )}
+            //     </div>
+            //   ))}
+            // </div>
+            <span className="flex items-center justify-center mt-5">
+              No data
+            </span>
+          )}
         </div>
-      </section>
+      </div>
     </div>
   );
 };
