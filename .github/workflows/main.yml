@@ -53,4 +53,4 @@ jobs:
       # Run development server
       - name: Start development server
         working-directory: ./triphaven-backend
-        run: npm run dev
+        run: npm run dev &
