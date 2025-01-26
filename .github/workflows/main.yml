@@ -29,7 +29,7 @@ jobs:
     # Run development server
     - name: Start development server
       working-directory: ./triphaven-frontend
-      run: npm run dev
+      run: npm run build
   backend:
       name: Backend Workflow (React Backend)
       runs-on: ubuntu-latest
@@ -53,4 +53,4 @@ jobs:
       # Run development server
       - name: Start development server
         working-directory: ./triphaven-backend
-        run: npm run dev
+        run: npm run build
