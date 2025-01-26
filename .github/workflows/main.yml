@@ -30,6 +30,14 @@ jobs:
     - name: Start development server
       working-directory: ./triphaven-frontend
       run: npm run build
+
+     # Upload frontend build artifacts
+    - name: Upload frontend build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: frontend-build-artifacts
+        path: ./triphaven-frontend/dist  # Adjust to the actual build output folder
+        
   backend:
       name: Backend Workflow (React Backend)
       runs-on: ubuntu-latest
@@ -54,3 +62,10 @@ jobs:
       - name: Start development server
         working-directory: ./triphaven-backend
         run: npm run dev &
+
+       # Upload backend build artifacts (if any)
+      - name: Upload backend build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-build-artifacts
+          path: ./triphaven-backend/build  # Adjust to your build folder if you have one (or logs, etc.)
