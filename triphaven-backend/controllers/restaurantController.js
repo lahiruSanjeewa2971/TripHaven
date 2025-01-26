@@ -39,6 +39,10 @@ const createRestaurant = async (req, res) => {
 
 const getFullList = async (req, res) => {
     try {
+        const {filterBy = null} = req.query;
+        console.log('getFullList with filters : ',filterBy)
+        let filters = {}
+
         const restaurantList = await Restaurant.find();
 
         res.status(200).json({
@@ -71,4 +75,20 @@ const getRestaurantsByTown = async (req, res) => {
     }
 }
 
-module.exports = { createRestaurant, getFullList, getRestaurantsByTown }
+const getRestaurantsWithTownAdded = async (req, res) => {
+    try {
+        const restaurantsList = await Restaurant.find().populate('town', 'townName');
+        res.status(200).json({
+            success: true,
+            data: restaurantsList
+        })
+    } catch (error) {
+        console.log('Error in getRestaurantsWithTownAdded :', error)
+        res.status(500).json({
+            success: false,
+            message: 'Something went wrong.'
+        })
+    }
+}
+
+module.exports = { createRestaurant, getFullList, getRestaurantsByTown, getRestaurantsWithTownAdded }

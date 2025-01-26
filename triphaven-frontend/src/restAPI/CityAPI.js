@@ -17,7 +17,7 @@ export const getCitiesList = async () => {
 
 export const getCitiesWithRestaurantsList = async () => {
     try {
-        const response = await axios.get(`${API_URL}/town/get-all-town-with-restaurant`)
+        const response = await axios.get(`${API_URL}/restaurant/get-restaurants-with-town`)
         return response.data;
     } catch (error) {
         console.log('Error in getting city with restaurants list. :', error)
