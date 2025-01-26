@@ -1,0 +1,56 @@
+name: Frontend and Backend CI
+
+on:
+  push:
+    branches:
+      - devops
+
+jobs:
+  frontend:
+    name: Frontend Workflow (Vite)
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the code
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    # Set up Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20 # Use your project's Node.js version
+
+    # Navigate to the frontend folder and install dependencies
+    - name: Install dependencies
+      working-directory: ./triphaven-frontend
+      run: npm install
+
+    # Run development server
+    - name: Start development server
+      working-directory: ./triphaven-frontend
+      run: npm run dev
+  backend:
+      name: Backend Workflow (React Backend)
+      runs-on: ubuntu-latest
+
+      steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20 # Use your project's Node.js version
+
+      # Navigate to the backend folder and install dependencies
+      - name: Install dependencies
+        working-directory: ./triphaven-backend
+        run: npm install
+
+      # Run development server
+      - name: Start development server
+        working-directory: ./triphaven-backend
+        run: npm run dev
