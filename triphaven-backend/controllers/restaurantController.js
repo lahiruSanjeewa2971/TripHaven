@@ -91,4 +91,6 @@ const getRestaurantsWithTownAdded = async (req, res) => {
     }
 }
 
+// const getRestaurantByName
+
 module.exports = { createRestaurant, getFullList, getRestaurantsByTown, getRestaurantsWithTownAdded }
