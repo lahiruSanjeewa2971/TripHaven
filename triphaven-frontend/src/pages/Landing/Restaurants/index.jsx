@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 const Restaurants = () => {
   const [loading, setLoading] = useState(false);
   const [townWithRestaurantList, setTownWithRestaurantList] = useState([]);
+  const [tempTownWithRestaurantList, setTempTownWithRestaurantList] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filterTownsList, setFilterTownsList] = useState([]);
   const [filterValue, setFilterValue] = useState(null);
@@ -25,11 +26,12 @@ const Restaurants = () => {
     try {
       setLoading(true);
       const response = await getCitiesWithRestaurantsList();
-      // console.log('get-restaurants-with-town :', response);
       if (response.success) {
         setTownWithRestaurantList(response.data);
+        setTempTownWithRestaurantList(response.data);
       } else {
         setTownWithRestaurantList([]);
+        setTempTownWithRestaurantList([]);
       }
     } catch (error) {
       console.log("Error in fetchTownWithRestaurants :", error);
@@ -59,26 +61,33 @@ const Restaurants = () => {
   };
 
   const handleSearch = (inputValue) => {
-    console.log("search text :", inputValue);
     setSearchText(inputValue);
+    if(inputValue.length > 0){
+      const filteredData = tempTownWithRestaurantList.filter((restaurant) => 
+        restaurant.restaurantName.toLowerCase().includes(inputValue.toLowerCase())
+      )
+      setTownWithRestaurantList(filteredData)
+    } else{
+      setTownWithRestaurantList(tempTownWithRestaurantList)
+    }
   };
 
   const fetchAllRestaurantsBasedOnTownName = async (filterValue) => {
-    console.log('fetchRestaurants')
+    console.log("fetchRestaurants");
     const query = new URLSearchParams({
-      filterBy: filterValue
-    })
-    console.log('fetchRestaurants | query :', query)
+      filterBy: filterValue,
+    });
+    console.log("fetchRestaurants | query :", query);
 
     try {
       // setLoading(true)
       const response = await fetchAllRestaurantsBasedOnTownName(query);
-      console.log('fetchRestaurants after filter :', response)
+      console.log("fetchRestaurants after filter :", response);
     } catch (error) {
       // setLoading(false)
-      console.log('Error in fetchAllRestaurantsBasedOnTownName :', error)
+      console.log("Error in fetchAllRestaurantsBasedOnTownName :", error);
     }
-  }
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -93,9 +102,9 @@ const Restaurants = () => {
   }, []);
 
   useEffect(() => {
-    console.log('filterValue :', filterValue)
-    if(filterValue !== null){
-      fetchAllRestaurantsBasedOnTownName(filterValue)
+    console.log("filterValue :", filterValue);
+    if (filterValue !== null) {
+      fetchAllRestaurantsBasedOnTownName(filterValue);
     }
   }, [filterValue]);
 
