@@ -1,5 +1,5 @@
 const express = require('express')
-const { createRestaurant, getFullList, getRestaurantsByTown, getRestaurantsWithTownAdded } = require('../controllers/restaurantController')
+const { createRestaurant, getFullList, getRestaurantsByTown, getRestaurantsWithTownAdded, getRestaurantDataByRestaurantId } = require('../controllers/restaurantController')
 const { authenticate } = require('../middlewares/authMiddleware')
 const { authorizeRole } = require('../middlewares/roleMiddleware')
 
@@ -13,5 +13,6 @@ router.post('/add', authenticate, authorizeRole(["restaurantOwner"]), createRest
 router.get('/get', getFullList)
 router.get('/get-restaurants-with-town', getRestaurantsWithTownAdded)
 router.get('/get-by-town/:id', getRestaurantsByTown)
+router.get('/get-by-restaurant-id/:id', getRestaurantDataByRestaurantId)
 
 module.exports = router
