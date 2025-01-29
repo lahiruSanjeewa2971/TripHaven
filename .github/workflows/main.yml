@@ -11,38 +11,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the code
-    - name: Checkout code
-      uses: actions/checkout@v3
-    
-    # Set up Node.js
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20 # Use your project's Node.js version
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # Navigate to the frontend folder and install dependencies
-    - name: Install dependencies
-      working-directory: ./triphaven-frontend
-      run: npm install
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20 # Use your project's Node.js version
 
-    # Run development server
-    - name: Start development server
-      working-directory: ./triphaven-frontend
-      run: npm run build
+      # Navigate to the frontend folder and install dependencies
+      - name: Install dependencies
+        working-directory: ./triphaven-frontend
+        run: npm install
 
-     # Upload frontend build artifacts
-    - name: Upload frontend build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: frontend-build-artifacts
-        path: ./triphaven-frontend/dist  # Adjust to the actual build output folder
-        
+      # Run development server
+      - name: Start development server
+        working-directory: ./triphaven-frontend
+        run: npm run build
+
+        # Upload frontend build artifacts
+      - name: Upload frontend build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-build-artifacts
+          path: ./triphaven-frontend/dist # Adjust to the actual build output folder
+
   backend:
-      name: Backend Workflow (React Backend)
-      runs-on: ubuntu-latest
+    name: Backend Workflow (React Backend)
+    runs-on: ubuntu-latest
 
-      steps:
+    steps:
       # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
@@ -63,9 +63,9 @@ jobs:
         working-directory: ./triphaven-backend
         run: npm run dev &
 
-       # Upload backend build artifacts (if any)
+        # Upload backend build artifacts (if any)
       - name: Upload backend build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: backend-build-artifacts
-          path: ./triphaven-backend/build  # Adjust to your build folder if you have one (or logs, etc.)
+          path: ./triphaven-backend/build # Adjust to your build folder if you have one (or logs, etc.)
