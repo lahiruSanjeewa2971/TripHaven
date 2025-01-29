@@ -14,3 +14,16 @@ export const fetchAllRestaurantsBasedOnTownName = async (query) => {
         };
     }
 }
+
+export const fetchSingleRestaurantByIdAPI = async (restaurantId) => {
+    try {
+        const response = await axios.get(`${API_URL}/restaurant/get-by-restaurant-id/${restaurantId}`)
+        return response.data
+    } catch (error) {
+        console.log('Error in getting restaurant details. :', error)
+        throw {
+            status: error.response?.status || 500,
+            message: error.response?.data?.message || "Something went wrong. Please try again.",
+        };
+    }
+}

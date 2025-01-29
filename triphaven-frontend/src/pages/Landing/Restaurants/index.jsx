@@ -13,14 +13,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Restaurants = () => {
   const [loading, setLoading] = useState(false);
   const [townWithRestaurantList, setTownWithRestaurantList] = useState([]);
-  const [tempTownWithRestaurantList, setTempTownWithRestaurantList] = useState([]);
+  const [tempTownWithRestaurantList, setTempTownWithRestaurantList] = useState(
+    []
+  );
   const [searchText, setSearchText] = useState("");
   const [filterTownsList, setFilterTownsList] = useState([]);
   const [filterValue, setFilterValue] = useState(null);
+
+  const navigation = useNavigate();
 
   const fetchTownWithRestaurants = async () => {
     try {
@@ -62,13 +67,15 @@ const Restaurants = () => {
 
   const handleSearch = (inputValue) => {
     setSearchText(inputValue);
-    if(inputValue.length > 0){
-      const filteredData = tempTownWithRestaurantList.filter((restaurant) => 
-        restaurant.restaurantName.toLowerCase().includes(inputValue.toLowerCase())
-      )
-      setTownWithRestaurantList(filteredData)
-    } else{
-      setTownWithRestaurantList(tempTownWithRestaurantList)
+    if (inputValue.length > 0) {
+      const filteredData = tempTownWithRestaurantList.filter((restaurant) =>
+        restaurant.restaurantName
+          .toLowerCase()
+          .includes(inputValue.toLowerCase())
+      );
+      setTownWithRestaurantList(filteredData);
+    } else {
+      setTownWithRestaurantList(tempTownWithRestaurantList);
     }
   };
 
@@ -87,6 +94,12 @@ const Restaurants = () => {
       // setLoading(false)
       console.log("Error in fetchAllRestaurantsBasedOnTownName :", error);
     }
+  };
+
+  const handleSingleRestaurantClick = (singleRestaurantData) => {
+    console.log("singleRestaurantData :", singleRestaurantData);
+    // dispatch(restaurantDataCapture(singleRestaurantData))
+    navigation(`/single-restaurant/${singleRestaurantData._id}`);
   };
 
   useEffect(() => {
@@ -204,6 +217,9 @@ const Restaurants = () => {
                   <div
                     key={index}
                     className="rounded-xl flex flex-col items-center lg:h-[500px] md:h-[500px] h-[500px] overflow-hidden transition-all duration-200 hover:p-2 cursor-pointer"
+                    onClick={() => {
+                      handleSingleRestaurantClick(singleRestaurant);
+                    }}
                   >
                     <div className="w-full h-3/5">
                       <img
