@@ -252,7 +252,7 @@ const SingleRestaurant = () => {
                     ) : (
                       <>
                         {placesToVisitListInTheCity.length > 0 ? (
-                          <div className="grid md:grid-cols-2 sm:grid-cols-2 grid-cols-1 gap-4">
+                          <div className="grid md:grid-cols-2 sm:grid-cols-2 grid-cols-1 gap-4 mt-2">
                             {placesToVisitListInTheCity.map(
                               (singlePlace, index) => (
                                 <div key={index} className="">
