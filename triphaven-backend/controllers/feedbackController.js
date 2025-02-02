@@ -4,14 +4,14 @@ const User = require("../models/User");
 
 const addNewFeedback = async (req, res) => {
     try {
-        const { userId, feedback, rating, destination } = req.body;
+        const { userId, feedback, rating, referenceId, referenceType } = req.body;
 
-        const checkDestinationExist = await Destination.findOne({ _id: destination })
-
-        if (!checkDestinationExist) return res.status(404).json({
-            success: false,
-            message: 'This destination is not in our system.'
-        })
+        if (!['town', 'restaurant', 'destination'].includes(referenceType)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid feedback type."
+            })
+        }
 
         const checkUserNameExist = await User.findOne({ _id: userId })
         if (!checkUserNameExist) return res.status(404).json({
@@ -20,7 +20,7 @@ const addNewFeedback = async (req, res) => {
         })
 
         const newFeedback = new Feedback({
-            userId, feedback, rating, destination
+            userId, feedback, rating, referenceId, referenceType
         })
         const saveFeedback = await newFeedback.save()
 
@@ -64,5 +64,24 @@ const getFeedbacksByDestinationId = async (req, res) => {
     }
 }
 
+const getFeedbackByReferenceId = async (req, res) => {
+    try {
+        const { referenceId } = req.params;
+        const feedbacks = await Feedback.find({ referenceId }).populate('userId', 'userName');
+        if (feedbacks) {
+            res.status(200).json({
+                success: true,
+                data: feedbacks
+            })
+        }
+    } catch (error) {
+        console.log('Error in getFeedbackByReferenceId :', error)
+        res.status(500).json({
+            success: false,
+            message: 'Something went wrong.'
+        })
+    }
+}
 
-module.exports = { addNewFeedback, getFeedbacksByDestinationId }
+
+module.exports = { addNewFeedback, getFeedbacksByDestinationId, getFeedbackByReferenceId }

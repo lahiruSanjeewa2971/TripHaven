@@ -2,9 +2,15 @@ import { getCitiesWithDestinationsList } from "@/restAPI/CityAPI";
 import { fetchSingleRestaurantByIdAPI } from "@/restAPI/RestaurantAPI";
 import { Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import SingleVisitingPlaceInTheCity from "./SingleVisitingPlaceInTheCity";
+import CommonReusablaForm from "@/components/common-form/form(another-way)";
+import { useSelector } from "react-redux";
+import {
+  GetUserFeedbackOnDestination,
+  PostUserFeedbackOnDestination,
+} from "@/restAPI/FeedbackAPI";
 
 const sampleFeedbacks = [
   {
@@ -36,6 +42,8 @@ const sampleFeedbacks = [
 ];
 
 const SingleRestaurant = () => {
+  const navigate = useNavigate();
+  const { userData } = useSelector((state) => state.auth);
   const { restaurantId } = useParams();
   const [loading, setLoading] = useState(false);
   const [loadingPlaces, setLoadingPlaces] = useState(false);
@@ -43,6 +51,8 @@ const SingleRestaurant = () => {
   const [placesToVisitListInTheCity, setPlacesToVisitListInTheCity] = useState(
     []
   );
+  const [formSubmitting, setFormSubmitting] = useState(false);
+  const [userFeedbacks, setUserFeedbacks] = useState([]);
 
   const fetchSingleRestaurantById = async (restaurantId) => {
     setLoading(true);
@@ -79,6 +89,52 @@ const SingleRestaurant = () => {
     }
   };
 
+  const handleFeedbackSend = async (data) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/auth", { state: { from: "/single-restaurant" } });
+      } else {
+        setFormSubmitting(true);
+        const feedbackPayload = {
+          userId: userData?._id,
+          feedback: data.comment,
+          rating: data.rating,
+          referenceId: restaurantId,
+          referenceType: "restaurant",
+        };
+        const response = await PostUserFeedbackOnDestination(
+          feedbackPayload,
+          token
+        );
+        console.log("handleFeedbackSend response :", response);
+        if (response.success) {
+          setFormSubmitting(false);
+          toast.success("Your feedback was added.");
+        } else {
+          setFormSubmitting(false);
+        }
+      }
+    } catch (error) {
+      console.log("Error in handleSendUserFeedback :", error);
+      toast.error("Failed to submit feedback.");
+    }
+  };
+
+  const fetchUserFeedbackOnDestination = async () => {
+    try {
+      const response = await GetUserFeedbackOnDestination(restaurantId);
+      console.log("GetUserFeedbackOnRestaurant :", response.data);
+      if (response.success) {
+        setUserFeedbacks(response?.data);
+      } else {
+        setUserFeedbacks([]);
+      }
+    } catch (error) {
+      console.log("Error in fetchUserFeedbackOnDestination :", error);
+    }
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -94,6 +150,12 @@ const SingleRestaurant = () => {
       fetchVisitPlacesOfThisCity(singleRestaurantData?.town?._id);
     }
   }, [singleRestaurantData]);
+
+  useEffect(() => {
+    if (restaurantId) {
+      fetchUserFeedbackOnDestination(restaurantId);
+    }
+  }, [restaurantId, formSubmitting]);
 
   return (
     <div>
@@ -180,9 +242,9 @@ const SingleRestaurant = () => {
                     <h2 className="md:text-2xl text-xl font-semibold capitalize font-playwrite">
                       This is the customers say.
                     </h2>
-                    {sampleFeedbacks.length > 0 ? (
+                    {userFeedbacks.length > 0 ? (
                       <>
-                        {sampleFeedbacks.map((single, index) => (
+                        {userFeedbacks.map((single, index) => (
                           <div
                             className="border rounded shadow-md flex flex-col mt-5 p-4"
                             key={index}
@@ -222,19 +284,27 @@ const SingleRestaurant = () => {
                               ))}
                             </div>
 
-                            <span className="pt-3">{single?.userId}</span>
+                            <span className="pt-3">{single?.userId?.userName}</span>
                           </div>
                         ))}
                       </>
                     ) : (
                       <>
                         <span className="flex items-center justify-start mt-4">
-                          No comments on this destination
+                          No comments on this restaurant
                         </span>
                       </>
                     )}
                   </div>
-                  <div>form</div>
+                  <div className="w-full hidden sm:flex flex-col items-center py-5 border-t-2 mt-4">
+                    <h1 className="text-2xl py-2">Place your thoughts.</h1>
+                    <div className="w-full">
+                      <CommonReusablaForm
+                        onSubmit={handleFeedbackSend}
+                        formSubmitting={formSubmitting}
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="md:w-2/5 w-full h-auto self-start">
                   <div className="md:pl-4 flex flex-col gap-2 md:px-2 px-0">
@@ -255,11 +325,10 @@ const SingleRestaurant = () => {
                           <div className="grid md:grid-cols-2 sm:grid-cols-2 grid-cols-1 gap-4 mt-2">
                             {placesToVisitListInTheCity.map(
                               (singlePlace, index) => (
-                                <div key={index} className="">
-                                  <SingleVisitingPlaceInTheCity
-                                    dataObject={singlePlace}
-                                  />
-                                </div>
+                                <SingleVisitingPlaceInTheCity
+                                  key={index}
+                                  dataObject={singlePlace}
+                                />
                               )
                             )}
                           </div>

@@ -38,7 +38,7 @@ const FullViewOfSingleCard = () => {
   const fetchUserFeedbackOnDestination = async (itemId) => {
     try {
       const response = await GetUserFeedbackOnDestination(itemId);
-      // console.log("GetUserFeedbackOnDestination :", response);
+      console.log("GetUserFeedbackOnDestination :", response);
       if (response.success) {
         setUserFeedbacks(response?.data);
       } else {
@@ -63,7 +63,8 @@ const FullViewOfSingleCard = () => {
           userId: userData?._id,
           feedback: data.comment,
           rating: data.rating,
-          destination: itemId,
+          referenceId: itemId,
+          referenceType: 'destination',
         };
 
         const response = await PostUserFeedbackOnDestination(
@@ -73,7 +74,7 @@ const FullViewOfSingleCard = () => {
         console.log("feedback response:", response);
         if (response.success) {
           setFormSubmitting(false);
-          // toast.success("Your feedback was added.");
+          toast.success("Your feedback was added.");
         } else {
           setFormSubmitting(false);
           // toast.error("Your feedback was not added.");

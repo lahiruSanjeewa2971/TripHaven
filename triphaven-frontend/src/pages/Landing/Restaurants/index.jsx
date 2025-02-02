@@ -190,7 +190,7 @@ const Restaurants = () => {
               <DropdownMenuContent align="end" className="w-[200px]">
                 <DropdownMenuRadioGroup
                   value={filterValue}
-                  onValueChange={(value) => setFilterValue(value)}
+                  // onValueChange={(value) => setFilterValue(value)}
                 >
                   {filterTownsList.map((singleTown) => (
                     <DropdownMenuRadioItem
