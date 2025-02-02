@@ -18,7 +18,7 @@ export const PostUserFeedbackOnDestination = async (feedbackRecord, token) => {
 }
 export const GetUserFeedbackOnDestination = async (destinationId) => {
     try {
-        const response = await axios.get(`${API_URL}/feedback/get-feedback-for-destination/${destinationId}`)
+        const response = await axios.get(`${API_URL}/feedback/get-feedback-for/${destinationId}`)
         return response.data;
     } catch (error) {
         console.log('Error in GetUserFeedbackOnDestination details. :', error)

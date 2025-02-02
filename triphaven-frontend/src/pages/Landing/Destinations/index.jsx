@@ -9,6 +9,7 @@ import image3 from "../../../assets/images/restaurant03.jpg";
 import image4 from "../../../assets/images/restaurant02.jpg";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getCitiesWithDestinationsList } from "@/restAPI/CityAPI";
+import { toast } from "react-toastify";
 
 const Destinations = () => {
   const navigation = useNavigate();
