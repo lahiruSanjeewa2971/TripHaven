@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import MapViewForLocation from "../MapView";
 
 const FullViewOfSingleCard = () => {
   const { userData } = useSelector((state) => state.auth);
@@ -38,7 +39,7 @@ const FullViewOfSingleCard = () => {
   const fetchUserFeedbackOnDestination = async (itemId) => {
     try {
       const response = await GetUserFeedbackOnDestination(itemId);
-      console.log("GetUserFeedbackOnDestination :", response);
+      // console.log("GetUserFeedbackOnDestination :", response);
       if (response.success) {
         setUserFeedbacks(response?.data);
       } else {
@@ -64,14 +65,14 @@ const FullViewOfSingleCard = () => {
           feedback: data.comment,
           rating: data.rating,
           referenceId: itemId,
-          referenceType: 'destination',
+          referenceType: "destination",
         };
 
         const response = await PostUserFeedbackOnDestination(
           feedbackPayload,
           token
         );
-        console.log("feedback response:", response);
+        // console.log("feedback response:", response);
         if (response.success) {
           setFormSubmitting(false);
           toast.success("Your feedback was added.");
@@ -153,17 +154,6 @@ const FullViewOfSingleCard = () => {
                             onSubmit={handleFeedbackSend}
                             formSubmitting={formSubmitting}
                           />
-                          {/* <CommonForm
-                            key={JSON.stringify(userFeedbackData)}
-                            formControls={
-                              userFeedbackForDestinationFormControls
-                            }
-                            buttonText={"Place"}
-                            formData={userFeedbackData}
-                            setFormData={setUserFeedbackData}
-                            isButtonStyleDisabled={true}
-                            handleSubmit={handleSendUserFeedback}
-                          /> */}
                         </div>
                       </div>
                     </div>
@@ -182,8 +172,8 @@ const FullViewOfSingleCard = () => {
       </div>
 
       {/* comment on the place */}
-      <div className="lg:p-3 lg:px-32 md:p-3 md:px-16 sm:p-3 sm:px-3 p-3 w-full flex flex-col md:flex-row">
-        <div className="flex flex-col items-center md:w-3/5 w-full ">
+      <div className="lg:p-3 lg:pl-24 md:p-3 md:pl-14 sm:p-3 sm:px-3 p-3 w-full flex flex-col md:flex-row gap-10">
+        <div className="flex flex-col items-center md:w-3/5 w-full">
           <h2 className="md:text-2xl text-xl font-semibold capitalize md:pt-4 p-2 pb-5 text-center font-playwrite">
             Hear It from Our Users
           </h2>
@@ -194,7 +184,7 @@ const FullViewOfSingleCard = () => {
                 {userFeedbacks.map((singleUserFeedback, index) => (
                   <div
                     key={singleUserFeedback._id}
-                    className="p-4 border rounded shadow-md mb-5 flex flex-col"
+                    className="p-4 border rounded shadow-md mb-5 flex flex-col bg-slate-200"
                   >
                     <p className="flex justify-start pb-3">
                       {singleUserFeedback.feedback}
@@ -247,7 +237,11 @@ const FullViewOfSingleCard = () => {
             )}
           </div>
         </div>
-        <div className="flex flex-col items-center w-2/5">
+        {/* <div className="flex flex-col items-center w-2/5 bg-gray-500 h-[400px] self-start"> */}
+        <div className="flex flex-col items-center md:w-2/5 w-full h-auto self-start">
+          <MapViewForLocation
+            fullDetailsOfDestination={fullDetailsOfDestination?.town?.townName}
+          />
           {/* <h2 className="md:text-2xl text-xl font-semibold capitalize md:pt-4 p-2 pb-5 text-center font-playwrite">
             Hear It from Our Users
           </h2> */}
