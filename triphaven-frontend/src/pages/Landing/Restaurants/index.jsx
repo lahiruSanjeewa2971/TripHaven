@@ -1,29 +1,42 @@
 import React, { useEffect, useState } from "react";
 import restaurantPage from "../../../assets/images/restaurant03.jpg";
 import restaurantPageHeader from "../../../assets/images/restaurant-header.jpg";
-import { getCitiesWithRestaurantsList } from "@/restAPI/CityAPI";
+import { getCitiesList, getCitiesWithRestaurantsList } from "@/restAPI/CityAPI";
 import { toast } from "react-toastify";
-import { Loader } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { ArrowUpDownIcon, Loader } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Restaurants = () => {
   const [loading, setLoading] = useState(false);
   const [townWithRestaurantList, setTownWithRestaurantList] = useState([]);
+  const [tempTownWithRestaurantList, setTempTownWithRestaurantList] = useState(
+    []
+  );
+  const [searchText, setSearchText] = useState("");
+  const [filterTownsList, setFilterTownsList] = useState([]);
+  const [filterValue, setFilterValue] = useState(null);
+
+  const navigation = useNavigate();
 
   const fetchTownWithRestaurants = async () => {
     try {
       setLoading(true);
       const response = await getCitiesWithRestaurantsList();
-      console.log(response);
       if (response.success) {
-        const filterNoRestaurants = response.data.filter(
-          (item) => item.restaurants.length > 0
-        );
-        // console.log("hi ", filterNoRestaurants);
-        setTownWithRestaurantList(filterNoRestaurants);
+        setTownWithRestaurantList(response.data);
+        setTempTownWithRestaurantList(response.data);
       } else {
         setTownWithRestaurantList([]);
+        setTempTownWithRestaurantList([]);
       }
     } catch (error) {
       console.log("Error in fetchTownWithRestaurants :", error);
@@ -33,6 +46,62 @@ const Restaurants = () => {
     }
   };
 
+  const fetchTownListToDisplayFilters = async () => {
+    try {
+      const response = await getCitiesList();
+      // console.log("getCitiesList :", response);
+      if (response.success) {
+        const cityDataFotFilterList = response?.data?.map((single, index) => {
+          return { id: single?._id, label: single?.townName };
+        });
+        console.log("cityDataFotFilterList :", cityDataFotFilterList);
+        setFilterTownsList(cityDataFotFilterList);
+      } else {
+        setFilterTownsList([]);
+      }
+    } catch (error) {
+      setFilterTownsList([]);
+      console.log("Error in fetchTownListToDisplayFilters : ", error);
+    }
+  };
+
+  const handleSearch = (inputValue) => {
+    setSearchText(inputValue);
+    if (inputValue.length > 0) {
+      const filteredData = tempTownWithRestaurantList.filter((restaurant) =>
+        restaurant.restaurantName
+          .toLowerCase()
+          .includes(inputValue.toLowerCase())
+      );
+      setTownWithRestaurantList(filteredData);
+    } else {
+      setTownWithRestaurantList(tempTownWithRestaurantList);
+    }
+  };
+
+  const fetchAllRestaurantsBasedOnTownName = async (filterValue) => {
+    console.log("fetchRestaurants");
+    const query = new URLSearchParams({
+      filterBy: filterValue,
+    });
+    console.log("fetchRestaurants | query :", query);
+
+    try {
+      // setLoading(true)
+      const response = await fetchAllRestaurantsBasedOnTownName(query);
+      console.log("fetchRestaurants after filter :", response);
+    } catch (error) {
+      // setLoading(false)
+      console.log("Error in fetchAllRestaurantsBasedOnTownName :", error);
+    }
+  };
+
+  const handleSingleRestaurantClick = (singleRestaurantData) => {
+    console.log("singleRestaurantData :", singleRestaurantData);
+    // dispatch(restaurantDataCapture(singleRestaurantData))
+    navigation(`/single-restaurant/${singleRestaurantData._id}`);
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -40,6 +109,17 @@ const Restaurants = () => {
   useEffect(() => {
     fetchTownWithRestaurants();
   }, []);
+
+  useEffect(() => {
+    fetchTownListToDisplayFilters();
+  }, []);
+
+  useEffect(() => {
+    console.log("filterValue :", filterValue);
+    if (filterValue !== null) {
+      fetchAllRestaurantsBasedOnTownName(filterValue);
+    }
+  }, [filterValue]);
 
   return (
     <div className="mb-[-0.3rem] bg-[#cee0eb] overflow-hidden">
@@ -91,12 +171,38 @@ const Restaurants = () => {
           <h1 className="md:text-5xl sm:text-4xl text-xl font-bold font-playwrite text-center">
             Our Restaurants.
           </h1>
-          <div className="my-5 sm:w-3/4 w-full px-4">
+          <div className="my-5 sm:w-3/4 w-full px-4 flex sm:flex-row flex-col gap-3">
             <Input
               type="text"
               className="w-full border-none bg-white text-black rounded-xl"
               placeholder="Search Restaurants..."
+              value={searchText}
+              onChange={(event) => handleSearch(event.target.value)}
             />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button>
+                  <ArrowUpDownIcon className="w-4 h-4" />
+                  <span className="font-medium">Filter By Town</span>
+                </Button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end" className="w-[200px]">
+                <DropdownMenuRadioGroup
+                  value={filterValue}
+                  // onValueChange={(value) => setFilterValue(value)}
+                >
+                  {filterTownsList.map((singleTown) => (
+                    <DropdownMenuRadioItem
+                      value={singleTown?.id}
+                      key={singleTown?.id}
+                    >
+                      {singleTown?.label}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {loading ? (
@@ -106,13 +212,70 @@ const Restaurants = () => {
             </div>
           ) : townWithRestaurantList && townWithRestaurantList.length > 0 ? (
             <>
-              <div className="my-4 w-full grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 lg:px-36 sm:px-20 px-10 items-center gap-5">
+              <div className="my-4 w-full grid xl:grid-cols-4 sm:grid-cols-2 grid-cols-1 lg:px-32 sm:px-20 px-10 items-center gap-5">
                 {townWithRestaurantList.map((singleRestaurant, index) => (
                   <div
                     key={index}
-                    className="bg-red-600 rounded-xl flex justify-center"
+                    className="rounded-xl flex flex-col items-center lg:h-[500px] md:h-[500px] h-[500px] overflow-hidden transition-all duration-200 hover:p-2 cursor-pointer"
+                    onClick={() => {
+                      handleSingleRestaurantClick(singleRestaurant);
+                    }}
                   >
-                    hi
+                    <div className="w-full h-3/5">
+                      <img
+                        src={singleRestaurant?.image}
+                        alt="image"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="relative flex flex-col justify-center items-center bg-white w-full h-2/5">
+                      <div className="absolute top-1 uppercase w-full flex justify-center">
+                        <span className="bg-black text-white rounded-xl text-center p-2 w-4/5 xl:text-sm lg:text-sm md:text-base sm:text-base text-sm">
+                          {singleRestaurant?.restaurantName}
+                        </span>
+                      </div>
+                      <div className="mt-2 text-center flex items-center">
+                        <span>
+                          Located in {singleRestaurant?.town.townName}
+                        </span>
+                      </div>
+                      <div className="flex items-center">
+                        {Array.from({ length: 5 }).map((_, starIndex) => (
+                          <span key={starIndex}>
+                            {starIndex < singleRestaurant.rating ? (
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                className="w-5 h-5 text-yellow-500"
+                              >
+                                <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.978 1.432 8.279L12 18.897l-7.368 4.666 1.432-8.279L.587 9.306l8.332-1.151z" />
+                              </svg>
+                            ) : (
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                className="w-5 h-5 text-gray-300"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"
+                                />
+                              </svg>
+                            )}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="text-center">
+                        <span className="text-center font-playwrite">
+                          Special in {singleRestaurant?.cuisine} foods
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 ))}
                 {/* <div className="bg-red-600 rounded-xl flex justify-center">hi</div>
