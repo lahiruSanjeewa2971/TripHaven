@@ -4,6 +4,7 @@ const {
   getFullList,
   getRestaurantsByTown,
   getRestaurantsWithTownAdded,
+  getRestaurantDataByRestaurantId,
 } = require("../controllers/restaurantController");
 const { authenticate } = require("../middlewares/authMiddleware");
 const { authorizeRole } = require("../middlewares/roleMiddleware");
@@ -23,5 +24,6 @@ router.post(
 router.get("/get", getFullList);
 router.get("/get-restaurants-with-town", getRestaurantsWithTownAdded);
 router.get("/get-by-town/:id", getRestaurantsByTown);
+router.get("/get-by-restaurant-id/:id", getRestaurantDataByRestaurantId);
 
 module.exports = router;
