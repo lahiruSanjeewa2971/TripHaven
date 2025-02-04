@@ -9,7 +9,12 @@ import {
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 
-const FormControls = ({ formControls = [], formData, setFormData, isButtonStyleDisabled }) => {
+const FormControls = ({
+  formControls = [],
+  formData,
+  setFormData,
+  isButtonStyleDisabled,
+}) => {
   const renderComponentByType = (getControlItem) => {
     let element = null;
     const value = formData[getControlItem.name] || null;

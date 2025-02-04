@@ -11,6 +11,7 @@ import Towns from "./pages/Landing/Towns";
 import Destinations from "./pages/Landing/Destinations";
 import Restaurants from "./pages/Landing/Restaurants";
 import FullViewOfSingleCard from "./pages/Landing/SingleCardClick";
+import SingleRestaurant from "./pages/Landing/Restaurants/SingleRestaurant";
 
 function App() {
   const dispatch = useDispatch();
@@ -47,7 +48,14 @@ function App() {
           <Route path="towns" element={<Towns />} />
           <Route path="destinations" element={<Destinations />} />
           <Route path="destinations/:cityId" element={<Destinations />} />
-          <Route path="single-card/:itemId" element={<FullViewOfSingleCard />} />
+          <Route
+            path="single-card/:itemId"
+            element={<FullViewOfSingleCard />}
+          />
+          <Route
+            path="single-restaurant/:restaurantId"
+            element={<SingleRestaurant />}
+          />
           <Route path="restaurants" element={<Restaurants />} />
           {/* <Route path="home" element={<LandingPage />} /> */}
         </Route>
