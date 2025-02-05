@@ -11,7 +11,7 @@ import Towns from "./pages/Landing/Towns";
 import Destinations from "./pages/Landing/Destinations";
 import Restaurants from "./pages/Landing/Restaurants";
 import FullViewOfSingleCard from "./pages/Landing/SingleCardClick";
-import SingleRestaurant from "./pages/Landing/Restaurants/SingleRestaurant.jsx";
+import SingleRestaurant from "./pages/Landing/Restaurants/SingleRestaurant";
 
 function App() {
   const dispatch = useDispatch();
