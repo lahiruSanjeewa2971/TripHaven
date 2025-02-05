@@ -1,5 +1,5 @@
 import { getCitiesWithDestinationsList } from "@/restAPI/CityAPI";
-import { fetchSingleRestaurantByIdAPI } from "@/restAPI/restaurantAPI";
+import { fetchSingleRestaurantByIdAPI } from "@/restAPI/RestaurantAPI";
 import { Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
