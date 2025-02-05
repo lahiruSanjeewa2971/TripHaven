@@ -16,7 +16,9 @@ import { lazy, Suspense } from "react";
 
 function App() {
   const dispatch = useDispatch();
-  const SingleRestaurant = lazy(() => import("./pages/Landing/Restaurants/SingleRestaurant"));
+  const SingleRestaurant = lazy(() =>
+    import("./pages/Landing/Restaurants/SingleRestaurant")
+  );
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -56,7 +58,10 @@ function App() {
           />
           <Route
             path="single-restaurant/:restaurantId"
-            element={<Suspense fallback={<div>Loading...</div>}><SingleRestaurant /></Suspense>
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <SingleRestaurant />
+              </Suspense>
             }
           />
           <Route path="restaurants" element={<Restaurants />} />

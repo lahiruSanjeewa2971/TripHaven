@@ -26,6 +26,9 @@ jobs:
         working-directory: ./triphaven-frontend
         run: npm install
 
+      - name: Remove old dist folder (if exists)
+        run: rm -rf dist # Deletes the dist folder
+
       # Run development server
       - name: Start development server
         working-directory: ./triphaven-frontend
