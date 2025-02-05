@@ -11,10 +11,12 @@ import Towns from "./pages/Landing/Towns";
 import Destinations from "./pages/Landing/Destinations";
 import Restaurants from "./pages/Landing/Restaurants";
 import FullViewOfSingleCard from "./pages/Landing/SingleCardClick";
-import SingleRestaurant from "./pages/Landing/Restaurants/SingleRestaurant";
+
+import { lazy, Suspense } from "react";
 
 function App() {
   const dispatch = useDispatch();
+  const SingleRestaurant = lazy(() => import("./pages/Landing/Restaurants/SingleRestaurant"));
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -54,7 +56,8 @@ function App() {
           />
           <Route
             path="single-restaurant/:restaurantId"
-            element={<SingleRestaurant />}
+            element={<Suspense fallback={<div>Loading...</div>}><SingleRestaurant /></Suspense>
+            }
           />
           <Route path="restaurants" element={<Restaurants />} />
           {/* <Route path="home" element={<LandingPage />} /> */}
