@@ -8,6 +8,11 @@ const Town = {
     );
     return { _id: result.insertId, townName, image, description, rating };
   },
+
+  getAll: async () => {
+    const [rows] = await pool.query("SELECT * FROM towns");
+    return rows;
+  },
 };
 
 module.exports = Town;
