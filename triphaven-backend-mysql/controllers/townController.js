@@ -10,4 +10,13 @@ const createTown = async (req, res) => {
   }
 };
 
+const getAllTowns = async (req, res) => {
+  try {
+    const towns = await Town.getAll();
+    res.json(towns);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = { createTown };
