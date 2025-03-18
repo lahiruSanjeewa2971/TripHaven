@@ -10,8 +10,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 
-app.use("/media", mediaRoutes);
-app.use('/api/towns', townRoutes)
+app.use("/mysqldb/media", mediaRoutes);
+app.use('/mysqldb/api/towns', townRoutes)
 // app.get("/", (req, res) => {
 //   res.send("TripHeaven API is running 🚀");
 // });
